@@ -581,7 +581,7 @@ $( function() {
          */
 		addInfomationEntry: function( summary ) {
 			// インフォオブジェクト未生成なら作成
-			if ( !$infomation.length ) {
+			if ( !$infomation ) {
 				this.createInfomationElement();
 			}
 
@@ -593,8 +593,8 @@ $( function() {
          * インフォメーションを表にアペンド
          */
 		appendInfomationToTable: function() {
-			// 例外オブジェクトがなければ終了
-			if ( !$infomation.length ) return;
+			// インフォオブジェクトがなければ終了
+			if ( !$infomation ) return;
 
 			// 追加されたインフォ数をカウントし、表示
 			$infomation.find( '#infomations-count' ).text(
