@@ -32,14 +32,14 @@ $( function() {
 		image_song  : 'イメージ曲'
 	};
 	const rPagename = /(?=^|.*<)(?!.*")(\w{2})\s(((?!<\/a>).)+)/;
-	const pagename = $( 'title' ).text().match( /^.+(?=\s-\s東方同人CDの歌詞)/ )[ 0 ];
+	const pagename  = $( 'title' ).text().match( /^.+(?=\s-\s東方同人CDの歌詞)/ )[ 0 ];
 	const $wikibody = $( '#wikibody' );
-	const $args = $( '#track_args' );
-	const $lyrics = $( '#lyrics' );
-	let $pagename,  // ページ名のjQオブジェクト
-		$table,     // トラック情報表のjQオブジェクト
-		$exception, // 例外表示のjQオブジェクト
-		args;       // オブジェクト化した引数
+	const $args     = $( '#track_args' );
+	const $lyrics   = $( '#lyrics' );
+	let   $pagename,  // ページ名のjQオブジェクト
+		  $table,     // トラック情報表のjQオブジェクト
+		  $exception, // 例外表示のjQオブジェクト
+		  args;       // オブジェクト化した引数
 
 	if ( $wikibody.length ) {
 		// PC
@@ -50,6 +50,9 @@ $( function() {
 	}
 
 	const TrackInfobox = {
+        /**
+         * 初期化
+         */
 		init: function() {
 			this.createExceptionDisplayElement();
 			// 引数をオブジェクト化
@@ -90,6 +93,9 @@ $( function() {
 			}
 		},
 
+        /**
+         * 引数記述を解析し、オブジェクトに変換
+         */
 		parseArgs: function() {
 			const localArgs = $args.html()
 				.replace( /\|/, '' )
@@ -121,12 +127,15 @@ $( function() {
 			args = data;
 		},
 
+        /**
+         * 引数からトラック表を生成
+         */
 		genTable: function() {
-			const tableKeys = Object.keys( args ); // 引数のキー配列
-			const title = args[ 'title' ];         // 曲名
-			const escKey = /^(next|prev)$/;        // 表生成時に除外するキー
-			const escValue = /^(\s*|\r|\n|\r\n)$/; // 表生成時に除外する値
-			let table = '<table id="trackinfo" border="1"><thead><tr><th colspan="2">';
+			const tableKeys = Object.keys( args );  // 引数のキー配列
+			const title     = args[ 'title' ];      // 曲名
+			const escKey    = /^(next|prev)$/;      // 表生成時に除外するキー
+			const escValue  = /^(\s*|\r|\n|\r\n)$/; // 表生成時に除外する値
+			let   table     = '<table id="trackinfo" border="1"><thead><tr><th colspan="2">';
 
 			// タイトル表示処理
 			if ( title ) {
@@ -148,8 +157,8 @@ $( function() {
 
 			// 各引数の表示処理
 			for ( let i in tableKeys )  {
-				const key = tableKeys[ i ]; // 現ループのキー名
-				const value = args[ key ];  // 現ループの値名
+				const key   = tableKeys[ i ];  // 現ループのキー名
+				const value = args[ key ];     // 現ループの値名
 
 				// 条件に満たない引数は弾く
 				if (
@@ -185,6 +194,9 @@ $( function() {
 			return table;
 		},
 
+        /**
+         * 引数に指定された各メディアを取得し、表示
+         */
 		fetchMedia: function() {
             const media = args[ 'media' ];
 
@@ -197,8 +209,8 @@ $( function() {
 
 			const ytId   = links.match( /(?=^|\b)(?=[\w-]{0,10}[A-Z])(?![sn]m)(?!\s)[\w-]{11}(?=$|,)/g );
 			const nicoId = links.match( /[sn]m\d{1,14}/g );
-			let scUrl    = links.match( /(?=^|\b)(?!watch|com|jp|be)[\w-]+\/[\w-]+(?=$|,)/ );
-			let html = '<tr class="trackrow media">'
+			let   scUrl  = links.match( /(?=^|\b)(?!watch|com|jp|be)[\w-]+\/[\w-]+(?=$|,)/ );
+			let   html   = '<tr class="trackrow media">'
 				+ '<th colspan="2">メディア</th>'
 				+ '</tr><tr class="trackrow media">'
 				+ '<td colspan="2">';
@@ -253,6 +265,9 @@ $( function() {
 			return html;
 		},
 
+        /**
+         * アルバム名のタグページから楽曲リストを取得するプロミスを返す
+         */
 		fetchAlbumTag: function() {
 			return new Promise( ( resolve, reject ) => {
 				// Fetch API非対応か、アルバム未指定の場合は動作しない
@@ -276,6 +291,9 @@ $( function() {
 			} );
 		},
 
+        /**
+         * カラオケのリクエスト番号の表エントリを作成し、挿入
+         */
 		insertKaraokeInfo: function() {
 			const $karaoke = $( `
 				<tr class="trackrow karaoke-info">
@@ -309,13 +327,19 @@ $( function() {
 					const $damUrl = $( args[ 'dam-req' ] );
 					$karaoke.find( '#karaoke-dam' ).wrapInner( $damUrl.text( '' ) );
 				}
-			}
+            }
+
+            // TODO: JOYSOUND
 		},
 
-		insertSongsAround: function( text ) {
-			const $tagHtml = $( text );                                             // タグページから取得したHTMLのjQオブジェクト
-			const $entryList = $tagHtml.find( '.cmd_tag ul' ).eq( 0 ).find( 'li' ); // 曲のjQオブジェクト
-			const rIsHtmlElement = /<a[\s\S]*>/i;                                   // HTMLタグ判別用のRegExp
+        /**
+         * 前後の楽曲を挿入
+         * @param {string} albumTagContent 楽曲リストを取得するアルバムタグページの名前
+         */
+		insertSongsAround: function( albumTagContent ) {
+			const $tagHtml       = $( albumTagContent );                                // タグページから取得したHTMLのjQオブジェクト
+			const $entryList     = $tagHtml.find( '.cmd_tag ul' ).eq( 0 ).find( 'li' ); // 曲のjQオブジェクト
+			const rIsHtmlElement = /<a[\s\S]*>/i;                                       // HTMLタグ判別用のRegExp
 
 			// タグ登録ページおよび前後の曲指定がなければ終了
 			if ( !$entryList.length && !args[ 'prev' ] && !args[ 'next' ] ) return;
@@ -365,7 +389,7 @@ $( function() {
 				// 現トラック番号が1の場合、1ループ目はスキップ
 				if ( currentPageTrackNumber === 1 && i === 0 ) continue;
 
-				const $item = $entryList.eq( i );      // 現ループのli
+				const $item     = $entryList.eq( i );  // 現ループのli
 				const trackName = $item.text().trim(); // 現ループの曲名
 
 				if ( !trackName ) return;
@@ -403,8 +427,8 @@ $( function() {
 				let count = 0; // 指定トラック番号が存在した回数
 
 				for ( let i in $entryList ) {
-					const $item = $entryList.eq( i );                                // 現ループのli
-					const trackName = $item.text().trim();                           // 現ループの曲名
+					const $item       = $entryList.eq( i );                          // 現ループのli
+					const trackName   = $item.text().trim();                         // 現ループの曲名
 					const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
 
 					if ( trackNumberToSearch === trackNumber ) count++;
@@ -414,11 +438,14 @@ $( function() {
 			}
 		},
 
-		// 前トラックへのリンク生成
-		genPrevTrackHtml: function( jqObject ) {
+		/**
+         * 前トラックへのリンク生成
+         * @param {object} jqLinkObject 挿入する前トラックのリンクオブジェクト
+         */
+		genPrevTrackHtml: function( jqLinkObject ) {
 			return `
 			<span class="prev-track">
-				${ $( jqObject ).find( 'a' )
+				${ $( jqLinkObject ).find( 'a' )
 					.attr( 'title', $( this ).text() )
 					.text( '&lt;&lt; 前の曲' )
 					.prop( 'outerHTML' ) }
@@ -426,11 +453,14 @@ $( function() {
 			`;
 		},
 
-		// 次トラックへのリンク生成
-		genNextTrackHtml: function( jqObject ) {
+		/**
+         * 後トラックへのリンク生成
+         * @param {object} jqLinkObject 挿入する後トラックのリンクオブジェクト
+         */
+		genNextTrackHtml: function( jqLinkObject ) {
 			return `
 			<span class="next-track">
-				${ $( jqObject ).find( 'a' )
+				${ $( jqLinkObject ).find( 'a' )
 					.attr( 'title', $( this ).text() )
 					.text( '次の曲 &gt;&gt;' )
 					.prop( 'outerHTML' ) }
@@ -438,11 +468,16 @@ $( function() {
 			`;
 		},
 
+        /**
+         * ボーカルおよび原曲の項目をタグページとしてリンクさせる
+         */
 		entryLinking: function() {
-			const target = '.vocal td:not(:has(ul)), .original td:not(:has(ul)), .vocal li, .original li';
+            const target = '.vocal td:not(:has(ul)), .original td:not(:has(ul)), .vocal li, .original li';
+
 			return $table.find( target ).html( ( _, elem ) => {
                 const items = elem.match( /[^<>]+(?![^<]*>|[^<>]*<\/)|.*>|.*<\//g );
 
+                // HTMLタグがなければ終了
                 if ( !items[ 0 ] ) return;
 
 				for ( let i in items ) {
@@ -472,12 +507,18 @@ $( function() {
 			} );
 		},
 
+        /**
+         * ページ名の表示を整形
+         */
 		modifyPagename: function() {
 			return $pagename.html( () => {
 				return pagename.replace( rPagename, '<span class="track_number">$1</span> $2' );
 			} );
 		},
 
+        /**
+         * 歌詞の表示を整形し、マークアップを追加する
+         */
 		modifyLyrics: function() {
 			const notInCard = '<div class="not_in_card">'
 				+ '<span>$1</span>'
@@ -495,6 +536,7 @@ $( function() {
 			$lyrics.html( ( _, elem ) => {
 				return elem
 					// 歌詞カード未記載歌詞
+					// $1: マークアップ内の内容
 					.replace( /__(.+?((\n.+?)+?)?)__/g, notInCard )
 					// 正しく聞き取れなかった歌詞
 					.replace( /[(（]([?？]{3}|聴音不可)[)）]/g, inaudible );
@@ -518,6 +560,9 @@ $( function() {
 			return true;
 		},
 
+        /**
+         * インフォメーション表示のjQオブジェを生成する
+         */
 		createExceptionDisplayElement: function() {
 			$exception = $( `
 				<tr>
@@ -531,6 +576,10 @@ $( function() {
 			` );
 		},
 
+        /**
+         * インフォメーションに項目を追加する
+         * @param {string} summary 追加する項目の内容
+         */
 		addExceptionEntry: function( summary ) {
 			// 例外オブジェクト未生成なら作成
 			if ( !$exception.length ) {
@@ -541,6 +590,9 @@ $( function() {
 			$exception.find( 'ul' ).append( `<li>${ summary }</li>` );
 		},
 
+        /**
+         * インフォメーションを表にアペンド
+         */
 		appendExceptionDisplayToTable: function() {
 			// 例外オブジェクトがなければ終了
 			if ( !$exception.length ) return;
