@@ -36,10 +36,10 @@ $( function() {
 	const $wikibody = $( '#wikibody' );
 	const $args     = $( '#track_args' );
 	const $lyrics   = $( '#lyrics' );
-	let   $pagename,  // ページ名のjQオブジェクト
-		  $table,     // トラック情報表のjQオブジェクト
-		  $exception, // 例外表示のjQオブジェクト
-		  args;       // オブジェクト化した引数
+	let   $pagename,   // ページ名のjQオブジェクト
+		  $table,      // トラック情報表のjQオブジェクト
+		  $infomation, // インフォ表示のjQオブジェクト
+		  args;        // オブジェクト化した引数
 
 	if ( $wikibody.length ) {
 		// PC
@@ -54,7 +54,6 @@ $( function() {
          * 初期化
          */
 		init: function() {
-            this.createExceptionDisplayElement();
 			// 引数をオブジェクト化
 			this.parseArgs();
 
@@ -274,12 +273,12 @@ $( function() {
 			return new Promise( ( resolve, reject ) => {
 				// Fetch API非対応か、アルバム未指定の場合は動作しない
 				if ( !window.fetch ) {
-					this.addExceptionEntry( 'このブラウザはFetch APIに対応していないため、前後の曲情報の取得は実行されません' );
+					this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の曲情報の取得は実行されません' );
 					reject();
 				}
 
 				if ( !args[ 'album' ] ) {
-					this.addExceptionEntry( '引数にアルバム指定がないため、前後の曲情報の取得は実行されません' );
+					this.addInfomationEntry( '引数にアルバム指定がないため、前後の曲情報の取得は実行されません' );
 					reject();
 				}
 
@@ -361,7 +360,7 @@ $( function() {
 					html += this.genPrevTrackHtml( args[ 'prev' ] );
 				} else {
 					// リンクでなければ例外
-					this.addExceptionEntry( '前トラックはリンクで指定してください' );
+					this.addInfomationEntry( '前トラックはリンクで指定してください' );
 				}
 			}
 
@@ -374,7 +373,7 @@ $( function() {
 					html += this.genNextTrackHtml( args[ 'next' ] );
 				} else {
 					// リンクでなければ例外
-					this.addExceptionEntry( '次トラックはリンクで指定してください' );
+					this.addInfomationEntry( '次トラックはリンクで指定してください' );
 				}
 			}
 
@@ -401,7 +400,7 @@ $( function() {
 				// 指定による挿入がなく、現ループの曲が前後のトラック番号かの判別
 				if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
 					if ( countSameTrackNumber( trackNumber ) > 1 ) {
-						this.addExceptionEntry(
+						this.addInfomationEntry(
                             `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません` );
 
 						return;
@@ -410,7 +409,7 @@ $( function() {
 					html += this.genPrevTrackHtml( $item );
 				} else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
 					if ( countSameTrackNumber( trackNumber ) > 1 ) {
-						this.addExceptionEntry(
+						this.addInfomationEntry(
                             `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません` );
 
 						return;
@@ -563,14 +562,14 @@ $( function() {
         /**
          * インフォメーション表示のjQオブジェを生成する
          */
-		createExceptionDisplayElement: function() {
-			$exception = $( `
+		createInfomationElement: function() {
+			$infomation = $( `
 				<tr>
 					<th>
-						<span id="excepions-count">_</span>個の情報があります
+						<span id="infomations-count">_</span>個の情報があります
 					</th>
 					<td>
-						<ul id="exceptions-content"></ul>
+						<ul id="infomations-content"></ul>
 					</td>
 				</tr>
 			` );
@@ -580,29 +579,29 @@ $( function() {
          * インフォメーションに項目を追加する
          * @param {string} summary 追加する項目の内容
          */
-		addExceptionEntry: function( summary ) {
-			// 例外オブジェクト未生成なら作成
-			if ( !$exception.length ) {
-				this.createExceptionDisplayElement();
+		addInfomationEntry: function( summary ) {
+			// インフォオブジェクト未生成なら作成
+			if ( !$infomation.length ) {
+				this.createInfomationElement();
 			}
 
 			// エントリー追加
-			$exception.find( 'ul' ).append( `<li>${ summary }</li>` );
+			$infomation.find( '#infomations-content' ).append( `<li>${ summary }</li>` );
 		},
 
         /**
          * インフォメーションを表にアペンド
          */
-		appendExceptionDisplayToTable: function() {
+		appendInfomationToTable: function() {
 			// 例外オブジェクトがなければ終了
-			if ( !$exception.length ) return;
+			if ( !$infomation.length ) return;
 
-			// 追加された例外数をカウントし、表示
-			$exception.find( '#exceptions-count' ).text(
-				$exception.find( 'li' ).length );
+			// 追加されたインフォ数をカウントし、表示
+			$infomation.find( '#infomations-count' ).text(
+				$infomation.find( 'li' ).length );
 
 			// 表末尾に追加
-			$table.find( 'tfoot' ).append( $exception );
+			$table.find( 'tfoot' ).append( $infomation );
 		}
 	};
 
