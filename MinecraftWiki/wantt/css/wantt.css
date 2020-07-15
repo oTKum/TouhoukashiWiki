@@ -1,0 +1,68 @@
+#wantt-body {
+	visibility: hidden;
+	opacity: 0;
+	position: absolute;
+	top: 70px;
+	box-shadow: 0 0 7px;
+	width: 200px;
+	border: solid 2px #c8ccd1;
+	border-radius: 3px;
+	padding: 5px;
+	background-color: rgba(234, 236, 240, .9);
+	font-size: smaller;
+	color: #222;
+	user-select: none;
+	transition: visibility .25s, opacity .25s;
+	z-index: 999;
+}
+#wantt-body.wantt-active {
+	visibility: visible;
+	opacity: 1;
+}
+#wantt-body label {
+	display: block;
+	font-weight: bold;
+}
+#wantt-body input {
+	width: calc(100% - 4px);
+}
+.wantt-item-wrapper {
+	display: flex;
+	position: relative;
+	flex-flow: row wrap;
+}
+.wantt-item {
+	flex: auto;
+}
+.wantt-item.actions-area {
+	width: 100%;
+	height: 28.5px;
+	margin-top: .4em;
+}
+.wantt-actions {
+	position: absolute;
+	bottom: 0;
+}
+.wantt-actions button:not(:first-child) {
+	margin-left: .5em;
+}
+.wantt-error {
+	visibility: hidden;
+	opacity: 0;
+	position: absolute;
+	top: -5px;
+	right: 0;
+	border-radius: 2px;
+	padding: 1px 3px;
+	background-color: rgba(34, 34, 34, .1);
+	font-weight: bold;
+	font-size: inherit;
+	transition: visibility .75s, opacity .75s;
+}
+.wantt-error.wantt-active {
+	visibility: visible;
+	opacity: 1;
+}
+.oo-ui-icon-translate {
+	background-image: url("https://gamepedia.cursecdn.com/minecraft_ja_gamepedia/1/14/Translate_button.svg");
+}

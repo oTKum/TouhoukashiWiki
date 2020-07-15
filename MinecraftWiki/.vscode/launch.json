@@ -1,0 +1,36 @@
+{
+	// IntelliSense を使用して利用可能な属性を学べます。
+	// 既存の属性の説明をホバーして表示します。
+	// 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Lua",
+			"type": "lua",
+			"request": "launch",
+			"stopOnEntry": true,
+			"program": "${workspaceFolder}/lua/test.lua",
+			"cwd": "${workspaceFolder}",
+			"path": "${workspaceFolder}/?.lua",
+			"cpath": "C:/Program Files/Lua/5.1.5/lua5.1.dll",
+			"arg": [],
+			"consoleCoding": "utf8"
+		},
+		{
+			"name": "Debug Lua",
+			"type": "lua",
+			"request": "launch",
+			"stopOnEntry": true,
+			"runtimeExecutable": "C:/Program Files/Lua/5.1.5/lua5.1.exe",
+			"runtimeArgs": "${workspaceFolder}/test.lua",
+			"consoleCoding": "utf8"
+		},
+		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "Launch Chrome",
+			"url": "${workspaceRoot}/html/test.html",
+			"webRoot": "${workspaceFolder}"
+		}
+	]
+}

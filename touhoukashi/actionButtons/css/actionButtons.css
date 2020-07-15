@@ -1,0 +1,198 @@
+@font-face {
+	font-family: 'FontAwesome';
+	font-style: normal;
+	font-weight: 900;
+	src: url('https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/52/fa-solid-900.woff2') format('woff2'),
+		url('https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/51/fa-solid-900.woff') format('woff'),
+		url('https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/53/fa-solid-900.ttf') format('truetype');
+}
+#ab-menu {
+	position: fixed;
+	right: 50px;
+	bottom: 50px;
+}
+#ab-menu a {
+	display: block;
+	height: 40px;
+	width: 40px;
+	color: unset;
+}
+#ab-menu ul {
+	list-style: none;
+	padding: 0;
+}
+#ab-menu li {
+	cursor: pointer;
+}
+#ab-menu form {
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transition: opacity .25s,
+				visibility .25s ease .25s;
+}
+#ab-menu form input {
+	width: 188.5px;
+}
+#ab-menu li > .fas,
+#ab-menu li a > .fas {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.ab-error__text .fas {
+	vertical-align: text-top;
+	font-size: 1.25em;
+	color: #ff6347;
+}
+#ab-create {
+	margin-bottom: 1em;
+}
+#ab-create #ab-create__newPage {
+	position: fixed;
+	top: -1000px;
+	left: -1000px;
+}
+#ab-edit {
+	float: right;
+}
+#ab-create li,
+#ab-edit li {
+	position: relative;
+	box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	border: 0;
+	border-radius: 100%;
+	background-color: #fbf2f6;
+	transition: background-color .3s;
+}
+#ab-menu li:hover {
+	background-color: #f2e1e5;
+}
+.ab-active__new #ab-create__new:hover {
+	background-color: #696969;
+}
+#ab-menu
+#ab-create__new,
+#ab-edit__edit {
+	height: 45px;
+	width: 45px;
+}
+#ab-create li:not(#ab-create__new) {
+	visibility: hidden;
+	margin: 2.5px;
+	height: 40px;
+	width: 40px;
+	transition: all .1s ease-in-out .1s,
+				height .3s ease-in-out,
+				width .3s ease-in-out,
+				background-color .3s;
+}
+#ab-create li:not(:last-child) {
+	margin-bottom: .5em;
+}
+li#ab-create__new {
+	transition: all .2s ease-in-out;
+}
+li#ab-create__album,
+li#ab-create__circle,
+li#ab-create__music {
+	position: absolute;
+	top: 0;
+	right: 0;
+	transition: top .2s ease-in-out 0s, right .2s ease-in-out 0s;
+}
+#ab-menu span {
+	position: absolute;
+	padding: 3px;
+	white-space: nowrap;
+	text-align: center;
+	color: #ffffff;
+	font-size: 90%;
+	-webkit-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	zoom: 99%;  /* 文字がぼやけるのを防止 */
+}
+.ab-menu__tooltip {
+	top: -22.5px;
+	right: 50%;
+	transform: translate(50%, -50%);
+	border: 1px solid rgba(0, 0, 0, .7);
+	border-radius: 3px;
+	background-color: rgba(0, 0, 0, .6);
+	opacity: 0;
+	transition: opacity .3s;
+}
+.ab-error__text {
+	top: -4px;
+	right: 107.5%;
+	border: 3px solid #dc3545;
+	border-radius: 3px;
+	background-color: rgba(0, 0, 0, .6);
+}
+#ab-create > *:hover span,
+#ab-edit > *:hover span {
+	opacity: 1;
+	transition-delay: .5s;
+}
+#ab-create__new .ab-menu__tooltip {
+	visibility: visible;
+	transition: .2s;
+}
+.ab-active__new#ab-create li:not(#ab-create__new) {
+	visibility: visible;
+}
+.ab-active__new li:not(#ab-create__new) {
+	transition: top .2s ease-in-out 0s, right .2s ease-in-out 0s;
+}
+.ab-active__new li#ab-create__album {
+	top: -65px;
+}
+.ab-active__new li#ab-create__circle {
+	top: -45px;
+	right: 45px;
+}
+.ab-active__new li#ab-create__music {
+	right: 65px;
+}
+.ab-active__new #ab-create__new {
+	background-color: #808080;
+	color: #ffffff;
+	transform: rotate(45deg);
+}
+.ab-active__new #ab-create__new span {
+	visibility: hidden;
+	transition: .03s;
+}
+.ab-active__new li:not(#ab-create__new) {
+	box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+}
+#ab-menu #ab-create .ab-active__newActions {
+	height: 30px;
+	width: 200px;
+	border-radius: 10px;
+	transition: all .25s ease .2s;
+}
+li > .fas {
+	opacity: 1;
+	transition: opacity .25s ease .25s;
+}
+#ab-create .ab-active__newActions > .fas {
+	opacity: 0;
+	transition: opacity .25s;
+}
+#ab-create .ab-active__newActions form {
+	opacity: 1;
+	visibility: visible;
+	transition: all .25s ease .25s;
+}
+#ab-create #ab-create__album.ab-active__newActions {
+	top: -85px;
+}
+#ab-create .ab-menu__small {
+	font-size: small;
+}

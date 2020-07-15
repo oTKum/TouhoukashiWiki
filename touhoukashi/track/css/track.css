@@ -1,0 +1,254 @@
+/** General styling **/
+@font-face {
+	font-family: 'Noto Sans JP';
+	font-display: swap;
+	font-style: normal;
+	font-weight: 350;
+	src: url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/10/NotoSansCJKjp-DemiLight.woff2) format('woff2'),
+		url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/9/NotoSansCJKjp-DemiLight.woff) format('woff'),
+		url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/8/NotoSansCJKjp-DemiLight.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'Noto Sans JP';
+	font-display: swap;
+	font-style: normal;
+	font-weight: bold;
+	src: url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/13/NotoSansCJKjp-Medium.woff2) format('woff2'),
+		url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/12/NotoSansCJKjp-Medium.woff) format('woff'),
+		url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/11/NotoSansCJKjp-Medium.ttf) format('truetype');
+}
+rt {
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+/** Main table styling **/
+#trackinfo, #lyrics {
+	font-family: 'Noto Sans JP', sans-serif;
+	font-weight: 350;
+}
+.track_number {
+	font-family: Rockwell;
+	font-weight: bold;
+}
+.track_number::after {
+	content: '.';
+}
+#track_args, .amp_text {
+	display: none;
+}
+#trackinfo {
+	float: right;
+	margin: 0 0 1em 1em;
+	padding: 0.3em;
+	width: 320px;
+	border-collapse: separate;
+	border-radius: 5px;
+	border-spacing: 0;
+	background-color: #F9F9F9;
+	font-size: 90%;
+	line-height: 1.4em;
+}
+#trackinfo th {
+	white-space: nowrap;
+}
+#trackinfo th,
+#trackinfo td {
+	border: none !important;
+}
+#trackinfo thead th {
+    background-color: #D8D8D8;
+	box-shadow: 0 -3px #F9F9F9 inset;
+	padding: 4px 0 7px 0;
+	white-space: normal;
+	font-size: 120%;
+	text-align: center;
+}
+.trackrow {
+	background-color: #F0F0F0;
+	box-shadow: 0 2px #F9F9F9 inset, 0 -2px #F9F9F9 inset;
+}
+#trackinfo td ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#trackinfo li {
+	line-height: 16px;
+}
+#trackinfo li:nth-of-type(n+2) {
+	margin-top: 6px;
+}
+#trackinfo dl {
+	margin: 0;
+}
+#trackinfo dt {
+	font-size: small;
+	font-weight: bold;
+}
+#trackinfo dd {
+	margin-left: 1.2em;
+}
+/* Media styling */
+#trackinfo .media th {
+	background-color: #D8D8D8;
+	padding: 4px 0;
+	font-size: 95%;
+	text-align: center;
+}
+.media td {
+	padding: 0 2px;
+}
+.media iframe:nth-of-type(n+2) {
+	margin-top: 0.3em;
+}
+.youtube + .nicovideo,
+.youtube + .soundcloud,
+.nicovideo + .soundcloud {
+	margin-top: 0.75em;
+}
+.media_section {
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+.media_section::before,
+.media_section::after {
+	display: block;
+	flex-grow: 1;
+	content: '';
+	height: 1px;
+}
+.media_section::before {
+	margin-right: 0.5em;
+	background: linear-gradient(-90deg, #888, transparent);
+}
+.media_section::after {
+	margin-left: 0.5em;
+	background: linear-gradient(90deg, #888, transparent);
+}
+.media_notice {
+	color: firebrick;
+	font-size: 77.5%;
+}
+/** Lyrics styling **/
+#lyrics {
+	font-size: 1.06em;
+	line-height: 1.6em;
+}
+.not_in_card,
+.inaudible {
+	display: inline;
+	position: relative;
+}
+.not_in_card {
+	border-bottom: dashed 1px #D0D0D0;
+}
+.tooltip {
+	display: flex;
+	visibility: hidden;
+	position: absolute;
+	top: -42.5px;
+	left: 0;
+	width: 275px;
+	min-height: 20px;
+	max-height: 100px;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #555;
+	align-items: center;
+	color: #FFF;
+	font-size: 85%;
+	line-height: 20px;
+	text-align: center;
+	white-space: nowrap;
+	opacity: 0;
+	transition: 0.7s;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.inaudible .tooltip {
+	top: -68.5px;
+}
+span:hover + .tooltip {
+	visibility: visible;
+	top: -47.5px;
+	opacity: 0.8;
+	transition: 0.3s;
+}
+.inaudible span:hover + .tooltip {
+	top: -73.5px;
+}
+.not_in_card span.hide {
+	top: -42.5px;
+	opacity: 0;
+	transition: 0.7s;
+}
+.inaudible .img {
+	display: inline-block;
+	width: 3.45em;
+	height: 1.25em;
+	margin-right: 4px;
+	margin-bottom: -3.5px;
+	margin-left: 4px;
+	background-image: url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2971/7/Inaudible.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+.not_in_card::after,
+.inaudible .img::after {
+	content: ' ';
+	visibility: hidden;
+	position: absolute;
+	top: -8.5px;
+	left: 42.5%;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+	opacity: 0;
+	transition: 0.7s;
+}
+.not_in_card:hover::after,
+.inaudible .img:hover::after {
+	content: '';
+	visibility: visible;
+	top: -13.5px;
+	left: 42.5%;
+	opacity: 0.8;
+	transition: 0.3s;
+}
+.not_in_card::after {
+	top: -2.5px;
+	left: 50%;
+}
+.not_in_card:hover::after {
+	top: -7.5px;
+	left: 50%;
+}
+.not_in_card.hide::after {
+	visibility: hidden;
+	top: -2.5px;
+	opacity: 0;
+	transition: 0.7s;
+}
+/** For mobile device styling **/
+.uk-overflow-container {
+	display: inline;
+}
+#trackinfo.mobile {
+	display: table;
+	float: none;
+	width: 100%;
+	margin: auto;
+	margin-bottom: 1em;
+}
+#trackinfo.mobile th {
+	text-transform: none;
+}
+#trackinfo.mobile tbody tr:not(.media) th {
+	text-align: left;
+	background-color: unset;
+}
+#trackinfo.mobile td {
+	white-space: normal;
+}
