@@ -54,13 +54,12 @@ $( function() {
          * 初期化
          */
 		init: function() {
-			this.createExceptionDisplayElement();
+            this.createExceptionDisplayElement();
 			// 引数をオブジェクト化
 			this.parseArgs();
 
 			// 表生成
-			$args.after( this.genTable() );
-			$table = $( '#trackinfo' );
+            $table = $( this.genTable() );
 
 			// 項目リンク化
 			this.entryLinking();
@@ -81,7 +80,7 @@ $( function() {
 			this.modifyPagename();
 
 			// 歌詞整形
-			if ( !this.modifyLyrics() ) {
+			if ( !$lyrics.length ) {
 				$table.after(
 					'<div class="error"><span style="font-weight: bold">Script: track</span>'
 					+ '<br>曲の歌詞を以下の形式で指定してください。'
@@ -89,8 +88,11 @@ $( function() {
 					+ '</div>'
 				);
 			} else {
-				this.modifyLyrics();
-			}
+                this.modifyLyrics();
+            }
+
+            // 表を挿入
+            $args.after( $table );
 		},
 
         /**
@@ -531,8 +533,6 @@ $( function() {
 				+ '</div>';
 			let $notInCard, $tooltip;
 
-			if ( !$lyrics.length ) return;
-
 			$lyrics.html( ( _, elem ) => {
 				return elem
 					// 歌詞カード未記載歌詞
@@ -540,9 +540,9 @@ $( function() {
 					.replace( /__(.+?((\n.+?)+?)?)__/g, notInCard )
 					// 正しく聞き取れなかった歌詞
 					.replace( /[(（]([?？]{3}|聴音不可)[)）]/g, inaudible );
-			} );
+            } );
 
-			$table.after( $lyrics );
+			$table.add( $lyrics );
 			$notInCard = $lyrics.find( '.not_in_card' );
 			$tooltip = $notInCard.children( '.tooltip' );
 
