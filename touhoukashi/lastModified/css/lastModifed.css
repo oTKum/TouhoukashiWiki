@@ -1,9 +1,9 @@
 #pageTabs {
-	position: relative;
+    position: relative;
 }
 .last-modified {
-	position: absolute;
-	top: 35px;
-	right: 5px;
-	font-size: small;
+    position: absolute;
+    top: 35px;
+    right: 5px;
+    font-size: small;
 }

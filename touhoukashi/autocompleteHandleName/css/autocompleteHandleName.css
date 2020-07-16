@@ -1,66 +1,66 @@
 .acHandleName-config {
-	color: white;
-	user-select: none;
+    color: white;
+    user-select: none;
 }
 .acHandleName-config label {
-	vertical-align: -0.2em;
-	cursor: pointer;
+    vertical-align: -0.2em;
+    cursor: pointer;
 }
 .acHandleName-config input[type="text"] {
-	margin-left: 1.8em;
+    margin-left: 1.8em;
 }
 .acHandleName-config input[type="checkbox"] {
-	margin-right: 0.5em;
-	vertical-align: -0.2em;
-	transform: scale(1.25);
+    margin-right: 0.5em;
+    vertical-align: -0.2em;
+    transform: scale(1.25);
 }
 .acHandleName-configButton {
-	margin-top: 1px;
-	margin-left: 10px;
-	border: 2px solid gray;
-	border-radius: 4px;
-	padding: 2px 3px;
-	cursor: pointer;
+    margin-top: 1px;
+    margin-left: 10px;
+    border: 2px solid gray;
+    border-radius: 4px;
+    padding: 2px 3px;
+    cursor: pointer;
 }
 .acHandleName-configItem {
-	visibility: hidden;
-	opacity: 0;
-	position: absolute;
-	top: 150%;
-	width: max-content;
-	box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
-	background-color: rgba(0, 0, 0, .75);
-	border: 2px outset #d0d0d0;
-	border-radius: 2px;
-	padding: 7px;
-	transition: opacity .5s, visibility .5s;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 150%;
+    width: max-content;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .75);
+    border: 2px outset #d0d0d0;
+    border-radius: 2px;
+    padding: 7px;
+    transition: opacity .5s, visibility .5s;
 }
 .acHandleName-active .acHandleName-configItem {
-	opacity: 1;
-	visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 #globalNav .acHandleName-configSave {
-	width: 50px;
-	margin-top: 7px;
-	margin-left: auto;
-	border: 1px solid gray;
-	border-radius: 3px;
-	background-color: rgba(88, 88, 88, .8);
-	padding: 2px;
-	cursor: pointer;
-	text-align: center;
-	font-weight: bold;
-	transition: background-color .2s;
+    width: 50px;
+    margin-top: 7px;
+    margin-left: auto;
+    border: 1px solid gray;
+    border-radius: 3px;
+    background-color: rgba(88, 88, 88, .8);
+    padding: 2px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color .2s;
 }
 #globalNav .acHandleName-configSave:hover {
-	background-color: rgba(88, 88, 88, .5);
+    background-color: rgba(88, 88, 88, .5);
 }
 .acHandleName-configSavedMessage {
-	display: none;
-	position: absolute;
-	bottom: 2%;
-	left: 45%;
-	color: #28a745;
-	text-shadow: 2px 2px 3px;
-	transform: translate(-50%, -50%);
+    display: none;
+    position: absolute;
+    bottom: 2%;
+    left: 45%;
+    color: #28a745;
+    text-shadow: 2px 2px 3px;
+    transform: translate(-50%, -50%);
 }
