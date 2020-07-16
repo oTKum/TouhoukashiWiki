@@ -20,6 +20,7 @@
 rt {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 }
+
 /** Main table styling **/
 #trackinfo, #lyrics {
 	font-family: 'Noto Sans JP', sans-serif;
@@ -87,7 +88,8 @@ rt {
 #trackinfo dd {
 	margin-left: 1.2em;
 }
-/* Media styling */
+
+/** Media styling **/
 #trackinfo .media th {
 	background-color: #D8D8D8;
 	padding: 4px 0;
@@ -129,6 +131,56 @@ rt {
 	color: firebrick;
 	font-size: 77.5%;
 }
+
+/** Infomation styling **/
+#trackinfo .info_header th {
+    padding: .3em .5em;
+    background-color: #D8D8D8;
+    font-size: 95%;
+}
+#trackinfo .infomation_show_btn_wrapper {
+    float: right;
+    font-size: 12px;
+}
+#trackinfo .infomation_show_btn {
+    cursor: pointer;
+}
+#trackinfo .info_content td {
+    padding: 0 0 0 5px;
+    height: 0;
+    transition: .3s;
+}
+#trackinfo .info_content ul {
+    padding: 0;
+    margin: 0;
+    height: 0;
+    list-style: initial;
+    transition: .3s;
+}
+#trackinfo .info_content li {
+    opacity: 0;
+    visibility: hidden;
+    margin: 0 0 0 1.5em;
+    max-height: 0;
+    transition: .3s, opacity .2s;
+}
+#trackinfo .info_content.infomation_show td {
+    padding: 5px;
+    height: 100%;
+}
+#trackinfo .info_content.infomation_show ul {
+    padding: 5px 0;
+    height: 100%;
+}
+#trackinfo .info_content.infomation_show li {
+    opacity: 1;
+    max-height: 4em;
+    visibility: visible;
+}
+#trackinfo .info_content.infomation_show li:nth-of-type(n+2) {
+    margin-top: 10px;
+}
+
 /** Lyrics styling **/
 #lyrics {
 	font-size: 1.06em;
@@ -231,6 +283,7 @@ span:hover + .tooltip {
 	opacity: 0;
 	transition: 0.7s;
 }
+
 /** For mobile device styling **/
 .uk-overflow-container {
 	display: inline;

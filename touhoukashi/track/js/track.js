@@ -67,13 +67,19 @@ $( function() {
 			$table.append( this.fetchMedia() );
 
 			// アルバムのタグページから曲一覧を取得し、前後の曲を挿入
-			this.fetchAlbumTag().then( this.insertSongsAround );
+            this.fetchAlbumTag().then( this.insertSongsAround );
+
+            // 実行に関する情報があれば表示
+            this.appendInfomationToTable();
 
 			// スマホ表示用のスタイル適用
 			const ua = navigator.userAgent;
 			if ( ua.match( /(iPhone|iPod|Android)(?=.*Mobile)/ ) ) {
 				$table.addClass( 'mobile' );
 			}
+
+            // 表を挿入
+            $args.after( $table );
 
 			// ページ名のトラック番号を太字に
 			this.modifyPagename();
@@ -89,9 +95,6 @@ $( function() {
 			} else {
                 this.modifyLyrics();
             }
-
-            // 表を挿入
-            $args.after( $table );
 		},
 
         /**
@@ -273,12 +276,12 @@ $( function() {
 			return new Promise( ( resolve, reject ) => {
 				// Fetch API非対応か、アルバム未指定の場合は動作しない
 				if ( !window.fetch ) {
-					this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の曲情報の取得は実行されません' );
+					this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の曲情報の取得は実行されません。' );
 					reject();
 				}
 
 				if ( !args[ 'album' ] ) {
-					this.addInfomationEntry( '引数にアルバム指定がないため、前後の曲情報の取得は実行されません' );
+					this.addInfomationEntry( '引数にアルバム指定がないため、前後の楽曲情報の取得は実行されません。' );
 					reject();
 				}
 
@@ -360,7 +363,7 @@ $( function() {
 					html += this.genPrevTrackHtml( args[ 'prev' ] );
 				} else {
 					// リンクでなければ例外
-					this.addInfomationEntry( '前トラックはリンクで指定してください' );
+					this.addInfomationEntry( '前トラックはリンクで指定してください。' );
 				}
 			}
 
@@ -373,7 +376,7 @@ $( function() {
 					html += this.genNextTrackHtml( args[ 'next' ] );
 				} else {
 					// リンクでなければ例外
-					this.addInfomationEntry( '次トラックはリンクで指定してください' );
+					this.addInfomationEntry( '次トラックはリンクで指定してください。' );
 				}
 			}
 
@@ -401,7 +404,7 @@ $( function() {
 				if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
 					if ( countSameTrackNumber( trackNumber ) > 1 ) {
 						this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません` );
+                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません。` );
 
 						return;
 					}
@@ -410,7 +413,7 @@ $( function() {
 				} else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
 					if ( countSameTrackNumber( trackNumber ) > 1 ) {
 						this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません` );
+                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません。` );
 
 						return;
 					}
@@ -541,9 +544,8 @@ $( function() {
 					.replace( /[(（]([?？]{3}|聴音不可)[)）]/g, inaudible );
             } );
 
-			$table.add( $lyrics );
 			$notInCard = $lyrics.find( '.not_in_card' );
-			$tooltip = $notInCard.children( '.tooltip' );
+			$tooltip   = $notInCard.children( '.tooltip' );
 
 			$lyrics.find( '.inaudible' ).on( {
 				mouseenter: () => {
@@ -556,6 +558,9 @@ $( function() {
 				}
             } );
 
+            // 整形した歌詞を挿入
+			$table.after( $lyrics );
+
 			return true;
 		},
 
@@ -564,15 +569,24 @@ $( function() {
          */
 		createInfomationElement: function() {
 			$infomation = $( `
-				<tr>
-					<th>
-						<span id="infomations-count">_</span>個の情報があります
-					</th>
-					<td>
-						<ul id="infomations-content"></ul>
+				<tr class="trackrow info_header">
+					<th colspan="2">
+						<span id="infomations_count">_</span>個の情報があります
+                        <span class="infomation_show_btn_wrapper">[<a class="infomation_show_btn">表示<a/>]</span>
+                    </th>
+                </tr>
+                <tr class="trackrow info_content">
+					<td colspan="2">
+						<ul id="infomations_content"></ul>
 					</td>
 				</tr>
-			` );
+            ` );
+
+            // 表示ボタンクリックでインフォ表示
+            $infomation.find( '.infomation_show_btn' ).on( 'click', ( elem ) => {
+                $( elem.target ).text( $infomation.hasClass( 'infomation_show' ) ? '表示' : '非表示' );
+                $infomation.eq( 2 ).toggleClass( 'infomation_show' );
+            } );
 		},
 
         /**
@@ -586,7 +600,7 @@ $( function() {
 			}
 
 			// エントリー追加
-			$infomation.find( '#infomations-content' ).append( `<li>${ summary }</li>` );
+			$infomation.find( '#infomations_content' ).append( `<li>${ summary }</li>` );
 		},
 
         /**
@@ -597,7 +611,7 @@ $( function() {
 			if ( !$infomation ) return;
 
 			// 追加されたインフォ数をカウントし、表示
-			$infomation.find( '#infomations-count' ).text(
+			$infomation.find( '#infomations_count' ).text(
 				$infomation.find( 'li' ).length );
 
 			// 表末尾に追加
