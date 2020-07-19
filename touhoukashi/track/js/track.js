@@ -470,6 +470,9 @@ $( function() {
             for ( let i in $entryList ) {
                 const $item       = $entryList.eq( i );                          // 現ループのli
                 const trackName   = $item.text().trim();                         // 現ループの曲名
+
+                if ( !trackName ) continue;
+
                 const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
 
                 if ( trackNumberToSearch === trackNumber ) count++;
