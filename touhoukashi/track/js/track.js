@@ -276,7 +276,7 @@ $( function() {
             return new Promise( ( resolve, reject ) => {
                 // Fetch API非対応か、アルバム未指定の場合は動作しない
                 if ( !window.fetch ) {
-                    this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の曲情報の取得は実行されません。' );
+                    this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の楽曲情報の取得は実行されません。' );
                     reject();
                 }
 
@@ -360,7 +360,7 @@ $( function() {
                     html += '<span class="prev-track"></span>';
                 } else if ( rIsHtmlElement.test( args[ 'prev' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
-                    html += this.genPrevTrackHtml( args[ 'prev' ] );
+                    html += this._genPrevTrackHtml( args[ 'prev' ] );
                 } else {
                     // リンクでなければ例外
                     this.addInfomationEntry( '前トラックはリンクで指定してください。' );
@@ -373,7 +373,7 @@ $( function() {
                     html += '<span class="next-track"></span>';
                 } else if ( rIsHtmlElement.test( args[ 'next' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
-                    html += this.genNextTrackHtml( args[ 'next' ] );
+                    html += this._genNextTrackHtml( args[ 'next' ] );
                 } else {
                     // リンクでなければ例外
                     this.addInfomationEntry( '次トラックはリンクで指定してください。' );
@@ -401,24 +401,25 @@ $( function() {
                 const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
 
                 // 指定による挿入がなく、現ループの曲が前後のトラック番号かの判別
+                // 前後の同一トラック番号が複数ある場合は例外表示
                 if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
-                    if ( countSameTrackNumber( trackNumber ) > 1 ) {
+                    if ( this._countSameTrackNumber( trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ args[ 'album' ] }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
-                        return;
+                        continue;
                     }
 
-                    html += this.genPrevTrackHtml( $item );
+                    html += this._genPrevTrackHtml( $item );
                 } else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
-                    if ( countSameTrackNumber( trackNumber ) > 1 ) {
+                    if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」にはトラック番号が重複する曲があるため、前後の曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ args[ 'album' ] }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
-                        return;
+                        break;
                     }
 
-                    html += this.genNextTrackHtml( $item );
+                    html += this._genNextTrackHtml( $item );
                     break; // 次トラックが見つかった時点で終了
                 }
             }
@@ -426,27 +427,13 @@ $( function() {
             html += '</td></tr>';
 
             $table.append( html );
-
-            function countSameTrackNumber( trackNumberToSearch ) {
-                let count = 0; // 指定トラック番号が存在した回数
-
-                for ( let i in $entryList ) {
-                    const $item       = $entryList.eq( i );                          // 現ループのli
-                    const trackName   = $item.text().trim();                         // 現ループの曲名
-                    const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
-
-                    if ( trackNumberToSearch === trackNumber ) count++;
-                }
-
-                return count;
-            }
         },
 
         /**
          * 前トラックへのリンク生成
          * @param {object} jqLinkObject 挿入する前トラックのリンクオブジェクト
          */
-        genPrevTrackHtml: function( jqLinkObject ) {
+        _genPrevTrackHtml: function( jqLinkObject ) {
             return `
             <span class="prev-track">
                 ${ $( jqLinkObject ).find( 'a' )
@@ -461,7 +448,7 @@ $( function() {
          * 後トラックへのリンク生成
          * @param {object} jqLinkObject 挿入する後トラックのリンクオブジェクト
          */
-        genNextTrackHtml: function( jqLinkObject ) {
+        _genNextTrackHtml: function( jqLinkObject ) {
             return `
             <span class="next-track">
                 ${ $( jqLinkObject ).find( 'a' )
@@ -470,6 +457,25 @@ $( function() {
                     .prop( 'outerHTML' ) }
             </span>
             `;
+        },
+
+        /**
+         * 指定したトラック番号である楽曲をタグ一覧内からカウントする
+         * @param {object} $entryList 検索対象のjQオブジェクト
+         * @param {int} trackNumberToSearch カウントするトラック番号
+         */
+        _countSameTrackNumber: function( $entryList, trackNumberToSearch ){
+            let count = 0; // 指定トラック番号が存在した回数
+
+            for ( let i in $entryList ) {
+                const $item       = $entryList.eq( i );                          // 現ループのli
+                const trackName   = $item.text().trim();                         // 現ループの曲名
+                const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
+
+                if ( trackNumberToSearch === trackNumber ) count++;
+            }
+
+            return count;
         },
 
         /**
