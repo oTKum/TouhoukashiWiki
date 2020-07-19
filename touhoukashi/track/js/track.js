@@ -403,7 +403,7 @@ $( function() {
                 // 指定による挿入がなく、現ループの曲が前後のトラック番号かの判別
                 // 前後の同一トラック番号が複数ある場合は例外表示
                 if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
-                    if ( this._countSameTrackNumber( trackNumber ) > 1 ) {
+                    if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
                             `タグページ「${ args[ 'album' ] }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
