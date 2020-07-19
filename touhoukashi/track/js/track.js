@@ -67,7 +67,7 @@ $( function() {
             $table.append( this.fetchMedia() );
 
             // アルバムのタグページから曲一覧を取得し、前後の曲を挿入
-            this.fetchAlbumTag().then( this.insertSongsAround );
+            this.fetchAlbumTag().then( res => this.insertSongsAround( res ) );
 
             // 実行に関する情報があれば表示
             this.appendInfomationToTable();
