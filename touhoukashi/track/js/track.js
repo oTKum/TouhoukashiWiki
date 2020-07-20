@@ -433,7 +433,10 @@ $( function() {
             }
 
             // 曲一覧から前後の曲を探す
-            for ( let i in $entryList ) {
+            for ( const i in $entryList ) {
+                // 前後両方を取得できているなら終了
+                if ( html.includes( 'prev-track' ) && html.includes( 'next-track' ) ) break;
+
                 const $item     = $entryList.eq( i ).find( 'a' ); // 現ループのa
                 const trackName = $item.text().trim();            // 現ループの曲名
 
