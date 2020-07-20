@@ -70,7 +70,9 @@ $( function() {
             $table.append( this.fetchMedia() );
 
             // アルバムのタグページから曲一覧を取得し、前後の曲を挿入
-            this.fetchAlbumTag().then( res => this.insertSongsAround( res ) );
+            this.fetchAlbumTag()
+            .then( res => this.insertSongsAround( res ) )
+            .then( () => this.addInfomationEntry( 'アルバムタグページの情報を取得できなかったため、前後の楽曲情報は表示されません。' ) );
 
             // 実行に関する情報があれば表示
             this.appendInfomationToTable();
