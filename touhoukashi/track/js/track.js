@@ -31,6 +31,7 @@ $( function() {
         original    : '原曲',
         image_song  : 'イメージ曲'
     };
+
     const rPagename = /(?=^|.*<)(?!.*")(\w{2})\s(((?!<\/a>).)+)/;
     const pagename  = $( 'title' ).text().match( /^.+(?=\s-\s東方同人CDの歌詞)/ )[ 0 ];
     const $wikibody = $( '#wikibody' );
@@ -59,6 +60,9 @@ $( function() {
 
             // 表生成
             $table = $( this.genTable() );
+
+            // ヘルプ表示
+            this.showHelp();
 
             // 項目リンク化
             this.entryLinking();
@@ -306,7 +310,7 @@ $( function() {
         insertKaraokeInfo: function() {
             const $karaoke = $( `
                 <tr class="trackrow karaoke_info">
-                    <th>カラオケ配信情報</th>
+                    <th>カラオケ<br>配信情報</th>
                     <td>
                         <dl>
                             <dt id="karaoke_dam">DAM</dt>
@@ -612,6 +616,19 @@ $( function() {
         },
 
         /**
+         * 表上にマニュアルページへのリンクを表示する
+         */
+        showHelp: function() {
+            const $help = $( `
+                <span id="trackinfo_help">
+                <a href="/touhoukashi/pages/2442.html">ヘルプ</a>
+                </span>
+            ` );
+
+            $table.find( 'thead' ).append( $help );
+        },
+
+        /**
          * インフォメーション表示のjQオブジェを生成する
          */
         createInfomationElement: function() {
@@ -629,7 +646,7 @@ $( function() {
                 </tr>
             ` );
 
-            // 表示ボタンクリックでインフォ表示
+            // 表示ボタンクリックでインフォ表示切り替え
             $infomation.find( '.infomation_show_btn' ).on( 'click', elem => {
                 $( elem.target ).text( $infomation.hasClass( 'infomation_show' ) ? '表示' : '非表示' );
                 $infomation.eq( 2 ).toggleClass( 'infomation_show' );

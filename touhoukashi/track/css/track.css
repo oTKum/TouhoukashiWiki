@@ -5,8 +5,8 @@
     font-style: normal;
     font-weight: 350;
     src: url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/10/NotoSansCJKjp-DemiLight.woff2) format('woff2'),
-        url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/9/NotoSansCJKjp-DemiLight.woff) format('woff'),
-        url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/8/NotoSansCJKjp-DemiLight.ttf) format('truetype');
+         url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/9/NotoSansCJKjp-DemiLight.woff) format('woff'),
+         url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/8/NotoSansCJKjp-DemiLight.ttf) format('truetype');
 }
 @font-face {
     font-family: 'Noto Sans JP';
@@ -14,8 +14,8 @@
     font-style: normal;
     font-weight: bold;
     src: url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/13/NotoSansCJKjp-Medium.woff2) format('woff2'),
-        url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/12/NotoSansCJKjp-Medium.woff) format('woff'),
-        url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/11/NotoSansCJKjp-Medium.ttf) format('truetype');
+         url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/12/NotoSansCJKjp-Medium.woff) format('woff'),
+         url(https://img.atwikiimg.com/www31.atwiki.jp/touhoukashi/attach/2972/11/NotoSansCJKjp-Medium.ttf) format('truetype');
 }
 rt {
     font-family: Arial, Verdana, Helvetica, sans-serif;
@@ -37,6 +37,7 @@ rt {
     display: none;
 }
 #trackinfo {
+    position: relative;
     float: right;
     margin: 0 0 1em 1em;
     padding: 0.3em;
@@ -87,6 +88,15 @@ rt {
 }
 #trackinfo dd {
     margin-left: 1.2em;
+}
+#trackinfo dd + dt {
+    margin-top: .5em;
+}
+#trackinfo_help {
+    position: absolute;
+    top: 3px;
+    right: 8px;
+    font-size: 85%;
 }
 
 /** Media styling **/
@@ -146,6 +156,7 @@ rt {
 #trackinfo .infomation_show_btn_wrapper {
     float: right;
     font-size: 12px;
+    user-select: none;
 }
 #trackinfo .infomation_show_btn {
     cursor: pointer;
