@@ -23,12 +23,14 @@ $( function() {
             '<span id="site_notice_header">お知らせ</span>',
             '<div id="site_notice_content"></div>',
         '</div>'
-     ].join() );
+     ].join( '' ) );
 
     const ua     = window.navigator.userAgent.toLowerCase();
     let   showed = 0;
 
-    for ( const msg of messages ) {
+    for ( let i in messages ) {
+        const msg = messages[ i ];
+
         // ID別の表示条件（任意）
         switch ( msg.id ) {
             // IE以外では表示しない
@@ -48,12 +50,12 @@ $( function() {
                 break;
         }
 
-        $html.find( '#site_notice_content' ).append( `
-            ${ $html.find( '.site_notice_entry' ).length ? '<hr>' : '' }
-            <div class="site_notice_entry">
-                ${ msg.content }
-            </div>
-        ` );
+        $html.find( '#site_notice_content' ).append( [
+            $html.find( '.site_notice_entry' ).length ? '<hr>' : '',
+            '<div class="site_notice_entry">',
+                msg.content,
+            '</div>'
+         ].join( '' ) );
 
         showed++;
     }
