@@ -469,6 +469,9 @@ $( function() {
 
             html += '</td></tr>';
 
+            // 前後の楽曲どちらもが取得できてなかったら挿入しない
+            if ( !html.includes( 'prev-track' ) && !html.includes( 'next-track' ) ) return;
+
             $table.append( html );
         },
 
