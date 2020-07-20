@@ -393,7 +393,7 @@ $( function() {
 
             // 前後の曲指定があった場合の処理
             if ( args[ 'prev' ] ) {
-                if ( args[ 'prev' ] == 'none' ) {
+                if ( args[ 'prev' ] === 'none' ) {
                     // none指定だった場合はテキストなしで挿入
                     html += '<span class="prev-track"></span>';
                 } else if ( rIsHtmlElement.test( args[ 'prev' ] ) ) {
@@ -406,7 +406,7 @@ $( function() {
             }
 
             if ( args[ 'next' ] ) {
-                if ( args[ 'next' ] == none ) {
+                if ( args[ 'next' ] === 'none' ) {
                     // none指定だった場合はテキストなしで挿入
                     html += '<span class="next-track"></span>';
                 } else if ( rIsHtmlElement.test( args[ 'next' ] ) ) {
@@ -470,12 +470,17 @@ $( function() {
 
         /**
          * 前トラックへのリンク生成
-         * @param {object} jqLinkObject 挿入する前トラックのリンクオブジェクト
+         * @param {object} $jqLinkObject 挿入する前トラックのリンクオブジェクト
          */
-        _genPrevTrackHtml: function( jqLinkObject ) {
+        _genPrevTrackHtml: function( $jqLinkObject ) {
+            // 配列の場合はパラメータ指定された場合のため、それ用に変形
+            $jqLinkObject = $.isArray( $jqLinkObject )
+                ? $( $jqLinkObject[ 0 ] )
+                : $( $jqLinkObject ).find( 'a' );
+
             return `
             <span class="prev-track">
-                ${ $( jqLinkObject ).find( 'a' )
+                ${ $( $jqLinkObject )
                 // titleをページ名で置換
                 .attr( 'title', function() { return $( this ).text().trim(); } )
                 .html( '<span style="margin-right: -.5em">&#9664;</span>&#9664; 前の曲' )
@@ -486,12 +491,16 @@ $( function() {
 
         /**
          * 後トラックへのリンク生成
-         * @param {object} jqLinkObject 挿入する後トラックのリンクオブジェクト
+         * @param {object} $jqLinkObject 挿入する後トラックのリンクオブジェクト
          */
-        _genNextTrackHtml: function( jqLinkObject ) {
+        _genNextTrackHtml: function( $jqLinkObject ) {
+            $jqLinkObject = $.isArray( $jqLinkObject )
+                ? $( $jqLinkObject[ 0 ] )
+                : $( $jqLinkObject ).find( 'a' );
+
             return `
             <span class="next-track">
-                ${ $( jqLinkObject ).find( 'a' )
+                ${ $( $jqLinkObject )
                 // titleをページ名で置換
                 .attr( 'title', function() { return $( this ).text().trim(); } )
                 .html( '次の曲 <span style="margin-right: -.5em">&#9654;</span>&#9654;' )
