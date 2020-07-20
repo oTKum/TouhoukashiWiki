@@ -78,10 +78,10 @@ $( function() {
             // アルバムのタグページから曲一覧を取得し、前後の曲を挿入
             this.fetchAlbumTag()
             .then( res => this.insertSongsAround( res ) )
-            .then( () => this.addInfomationEntry( 'アルバムタグページの情報を取得できなかったため、前後の楽曲情報は表示されません。' ) );
-
+            .then( () => this.addInfomationEntry( 'アルバムタグページの情報を取得できなかったため、前後の楽曲情報は表示されません。' ) )
             // 実行に関する情報があれば表示
-            this.appendInfomationToTable();
+            // 非同期処理によって一番最後の処理となる可能性が高いため、ここで呼び出し
+            .finally( () => this.appendInfomationToTable() );
 
             // スマホ表示用のスタイル適用
             const ua = navigator.userAgent;
@@ -436,6 +436,8 @@ $( function() {
             for ( const i in $entryList ) {
                 // 前後両方を取得できているなら終了
                 if ( html.includes( 'prev-track' ) && html.includes( 'next-track' ) ) break;
+                // 整数じゃなければ終了
+                if ( isNaN( i ) ) break;
 
                 const $item     = $entryList.eq( i ).find( 'a' ); // 現ループのa
                 const trackName = $item.text().trim();            // 現ループの曲名
