@@ -303,17 +303,17 @@ $( function() {
          */
         insertKaraokeInfo: function() {
             const $karaoke = $( `
-                <tr class="trackrow karaoke-info">
+                <tr class="trackrow karaoke_info">
                     <th>カラオケ配信情報</th>
                     <td>
                         <dl>
-                            <dt id="karaoke-dam">DAM</dt>
-                            <dd id="karaoke-dam-content">
-                                選曲番号：<span id="karaoke-dam-req">不明</span>
+                            <dt id="karaoke_dam">DAM</dt>
+                            <dd id="karaoke_dam-content">
+                                選曲番号：<span id="karaoke_dam_req">不明</span>
                             </dd>
-                            <dt id="karaoke-joysound">JOYSOUND</dt>
-                            <dd id="karaoke-joysound-content">
-                                曲番号：<span id="karaoke-joysound-req">不明</span>
+                            <dt id="karaoke_joysound">JOYSOUND</dt>
+                            <dd id="karaoke_joysound_content">
+                                曲番号：<span id="karaoke_joysound_req">不明</span>
                             </dd>
                         </dl>
                     </td>
@@ -327,22 +327,43 @@ $( function() {
             // DAM
             // none指定なら未配信表示
             if ( damReqNo === 'none' ) {
-                $karaoke.find( '#karaoke-dam-req' ).text( '未配信' );
-            } else if ( args[ 'dam-req' ] ) {
+                $karaoke.find( '#karaoke_dam_req' ).text( '未配信' );
+            } else if ( damReqUrl ) {
                 // 選曲番号のフォーマットでなければ例外表示
                 if ( rDamReqFormat.test( damReqNo ) ) {
                     // URL指定があればそちらにリンク
                     const damUrl = damReqUrl
-                        ? damReqUrl
+                        ? $( damReqUrl ).attr( 'href' )
                         : 'https://www.clubdam.com/karaokesearch/songleaf.html?requestNo=' + damReqNo;
                     const $dam   = $( `<a href="${ damUrl }">${ damReqNo }</a>` );
-                    $karaoke.find( '#karaoke-dam-req' ).html( $dam );
+
+                    $karaoke.find( '#karaoke_dam_req' ).html( $dam );
                 } else {
-                    this.addInfomationEntry( 'DAMの選曲番号は<span class="code">(半角数字4字)-(半角数字2字)</span>の形式で入力してください。' );
+                    this.addInfomationEntry( 'DAMの選曲番号は<span class="code">(半角数字4字)-(半角数字2字)</span>の形式で指定してください。' );
                 }
             }
 
-            // TODO: JOYSOUND
+            const joyReqNo      = args[ 'joy-req' ] ? args[ 'joy-req' ].trim() : null;
+            const joyReqUrl     = args[ 'joy-url' ] ? args[ 'joy-url' ].trim() : null;
+            const rJoyReqFormat = /^\d+$/;
+
+            // JOYSOUND
+            // none指定なら未配信表示
+            if ( joyReqNo === 'none' ) {
+                $karaoke.find( '#karaoke_joysound_req' ).text( '未配信' );
+            } else if ( joyReqNo ) {
+                // 曲番号のフォーマットでなければ例外表示
+                if ( rJoyReqFormat.test( joyReqNo ) ) {
+                    $karaoke.find( '#karaoke_joysound_req' ).html(
+                        // URL指定があればそちらにリンク
+                        joyReqUrl
+                            ? `<a href="${ $( joyReqUrl ).attr( 'href' ) }">${ joyReqNo }</a>`
+                            : joyReqNo
+                    );
+                } else {
+                    this.addInfomationEntry( 'JOYSOUNDの曲番号は半角数字のみで指定してください。' );
+                }
+            }
 
             $table.append( $karaoke );
         },
