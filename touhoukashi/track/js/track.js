@@ -320,18 +320,22 @@ $( function() {
                 </tr>
             ` );
 
-            const damReq = args[ 'dam-req' ].trim();
+            const damReqNo      = args[ 'dam-req' ] ? args[ 'dam-req' ].trim() : null;
+            const damReqUrl     = args[ 'dam-url' ] ? args[ 'dam-url' ].trim() : null;
             const rDamReqFormat = /^\d{4}-\d{2}$/;
 
             // DAM
             // none指定なら未配信表示
-            if ( damReq === 'none' ) {
+            if ( damReqNo === 'none' ) {
                 $karaoke.find( '#karaoke-dam-req' ).text( '未配信' );
             } else if ( args[ 'dam-req' ] ) {
                 // 選曲番号のフォーマットでなければ例外表示
-                if ( rDamReqFormat.test( damReq ) ) {
-                    const damUrl = 'https://www.clubdam.com/karaokesearch/songleaf.html?requestNo=' + args[ 'dam-req' ];
-                    const $dam   = $( `<a href="${ damUrl }">${ args[ 'dam-req' ] }</a>` );
+                if ( rDamReqFormat.test( damReqNo ) ) {
+                    // URL指定があればそちらにリンク
+                    const damUrl = damReqUrl
+                        ? damReqUrl
+                        : 'https://www.clubdam.com/karaokesearch/songleaf.html?requestNo=' + damReqNo;
+                    const $dam   = $( `<a href="${ damUrl }">${ damReqNo }</a>` );
                     $karaoke.find( '#karaoke-dam-req' ).html( $dam );
                 } else {
                     this.addInfomationEntry( 'DAMの選曲番号は<span class="code">(半角数字4字)-(半角数字2字)</span>の形式で入力してください。' );
