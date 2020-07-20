@@ -391,12 +391,13 @@ $( function() {
             // 曲一覧から前後の曲を探す
             for ( let i in $entryList ) {
                 // 現トラック番号が1の場合、1ループ目はスキップ
-                if ( currentPageTrackNumber === 1 && i === 0 ) continue;
+                if ( currentPageTrackNumber === 1 && Number( i ) === 0 ) continue;
 
                 const $item     = $entryList.eq( i );  // 現ループのli
                 const trackName = $item.text().trim(); // 現ループの曲名
 
-                if ( !trackName ) return;
+                // 楽曲名が不正なら弾く
+                if ( !trackName ) continue;
 
                 const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
 
@@ -437,9 +438,10 @@ $( function() {
             return `
             <span class="prev-track">
                 ${ $( jqLinkObject ).find( 'a' )
-                    .attr( 'title', $( this ).text() )
-                    .text( '&lt;&lt; 前の曲' )
-                    .prop( 'outerHTML' ) }
+                // titleをページ名で置換
+                .attr( 'title', function() { return $( this ).text().trim(); } )
+                .html( '<span style="margin-right: -.5em">&#9664;</span>&#9664; 前の曲' )
+                .prop( 'outerHTML' ) }
             </span>
             `;
         },
@@ -452,9 +454,10 @@ $( function() {
             return `
             <span class="next-track">
                 ${ $( jqLinkObject ).find( 'a' )
-                    .attr( 'title', $( this ).text() )
-                    .text( '次の曲 &gt;&gt;' )
-                    .prop( 'outerHTML' ) }
+                // titleをページ名で置換
+                .attr( 'title', function() { return $( this ).text().trim(); } )
+                .html( '次の曲 <span style="margin-right: -.5em">&#9654;</span>&#9654;' )
+                .prop( 'outerHTML' ) }
             </span>
             `;
         },
@@ -468,10 +471,11 @@ $( function() {
             let count = 0; // 指定トラック番号が存在した回数
 
             for ( let i in $entryList ) {
-                const $item       = $entryList.eq( i );                          // 現ループのli
-                const trackName   = $item.text().trim();                         // 現ループの曲名
+                const $item     = $entryList.eq( i );  // 現ループのli
+                const trackName = $item.text().trim(); // 現ループの曲名
 
-                if ( !trackName ) continue;
+                // 楽曲名が不正なら弾く
+                if ( !trackName || !rPagename.test( trackName ) ) continue;
 
                 const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
 

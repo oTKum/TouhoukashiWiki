@@ -132,6 +132,11 @@ rt {
     font-size: 77.5%;
 }
 
+/** Around track styling **/
+.next-track {
+    float: right;
+}
+
 /** Infomation styling **/
 #trackinfo .info_header th {
     padding: .3em .5em;
