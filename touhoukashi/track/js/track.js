@@ -386,8 +386,10 @@ $( function() {
             // タグ登録ページおよび前後の曲指定がなければ終了
             if ( !$entryList.length && !args[ 'prev' ] && !args[ 'next' ] ) return;
 
-            const currentPageTrackNumber = Number( pagename.match( rPagename )[ 1 ] ); // 現在表示してるページのトラック番号
-            let html = '';                                                             // HTML構造用
+            const currentPageTrackNumber = rPagename.test( pagename ) // 現在表示してるページのトラック番号
+                ? Number( pagename.match( rPagename )[ 1 ] )
+                : 0;
+            let html = ''; // HTML構造用
 
             html += '<tr class="trackrow prev-and-next"><td colspan="2">';
 
@@ -422,8 +424,8 @@ $( function() {
             if ( $( html ).find( '.prev-track, .next-track' ).length === 2 ) {
                 html += '</td></tr>';
                 $table.append( html );
-                return;
 
+                return;
             }
 
             // 曲一覧から前後の曲を探す
@@ -431,13 +433,15 @@ $( function() {
                 // 現トラック番号が1の場合、1ループ目はスキップ
                 if ( currentPageTrackNumber === 1 && Number( i ) === 0 ) continue;
 
-                const $item     = $entryList.eq( i );  // 現ループのli
-                const trackName = $item.text().trim(); // 現ループの曲名
+                const $item     = $entryList.eq( i ).find( 'a' ); // 現ループのa
+                const trackName = $item.text().trim();            // 現ループの曲名
 
                 // 楽曲名が不正なら弾く
                 if ( !trackName ) continue;
 
-                const trackNumber = Number( trackName.match( rPagename )[ 1 ] ); // 現ループのトラック番号
+                const trackNumber = rPagename.test( trackName ) // 現ループのトラック番号
+                    ? Number( trackName.match( rPagename )[ 1 ] )
+                    : 0;
 
                 // 指定による挿入がなく、現ループの曲が前後のトラック番号かの判別
                 // 前後の同一トラック番号が複数ある場合は例外表示
@@ -476,7 +480,7 @@ $( function() {
             // 配列の場合はパラメータ指定された場合のため、それ用に変形
             $jqLinkObject = $.isArray( $jqLinkObject )
                 ? $( $jqLinkObject[ 0 ] )
-                : $( $jqLinkObject ).find( 'a' );
+                : $( $jqLinkObject );
 
             return `
             <span class="prev-track">
@@ -496,7 +500,7 @@ $( function() {
         _genNextTrackHtml: function( $jqLinkObject ) {
             $jqLinkObject = $.isArray( $jqLinkObject )
                 ? $( $jqLinkObject[ 0 ] )
-                : $( $jqLinkObject ).find( 'a' );
+                : $( $jqLinkObject );
 
             return `
             <span class="next-track">
