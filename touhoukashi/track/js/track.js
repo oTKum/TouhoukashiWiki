@@ -434,9 +434,6 @@ $( function() {
 
             // 曲一覧から前後の曲を探す
             for ( let i in $entryList ) {
-                // 現トラック番号が1の場合、1ループ目はスキップ
-                if ( currentPageTrackNumber === 1 && Number( i ) === 0 ) continue;
-
                 const $item     = $entryList.eq( i ).find( 'a' ); // 現ループのa
                 const trackName = $item.text().trim();            // 現ループの曲名
 
