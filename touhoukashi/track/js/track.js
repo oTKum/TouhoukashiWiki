@@ -460,11 +460,11 @@ $( function() {
                         this.addInfomationEntry(
                             `タグページ「${ args[ 'album' ] }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
-                        break;
+                        continue;
                     }
 
                     html += this._genNextTrackHtml( $item );
-                    break; // 次トラックが見つかった時点で終了
+                    continue;
                 }
             }
 
