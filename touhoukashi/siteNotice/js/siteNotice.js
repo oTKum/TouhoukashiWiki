@@ -18,16 +18,15 @@ $( function() {
         // },
     ];
 
-    const $html = $( `
-        <div id="site_notice">
-            <span id="site_notice_header">お知らせ</span>
-            <div id="site_notice_content"></div>
-        </div>
-    ` );
+    const $html = $( [
+        '<div id="site_notice">',
+            '<span id="site_notice_header">お知らせ</span>',
+            '<div id="site_notice_content"></div>',
+        '</div>'
+     ].join() );
 
-    const $content = $( $html ).find( '#site_notice_content' );
-    const ua       = window.navigator.userAgent.toLowerCase();
-    let showed     = 0;
+    const ua     = window.navigator.userAgent.toLowerCase();
+    let   showed = 0;
 
     for ( const msg of messages ) {
         // ID別の表示条件（任意）
