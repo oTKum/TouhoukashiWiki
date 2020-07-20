@@ -32,8 +32,10 @@ $( function() {
         image_song  : 'イメージ曲'
     };
 
-    const rPagename = /(?=^|.*<)(?!.*")(\w{2})\s(((?!<\/a>).)+)/;
-    const pagename  = $( 'title' ).text().match( /^.+(?=\s-\s東方同人CDの歌詞)/ )[ 0 ];
+    const rPagename = /(?=^|.*<)(?!.*")(\w{2})\s(((?!<\/a>).)+)/;                      // 楽曲ページ名判定用
+    const pagename  = $( 'title' ).text().match( /^.+(?=\s-\s東方同人CDの歌詞)/ )[ 0 ]; // 現在のページ名
+    const l         = window.location;                                                 // 制限回避用
+    const isMobile  = l.href.includes( 'touhoukashi/sp/' ) ? true : false              // モバイル表示か否か
     const $wikibody = $( '#wikibody' );
     const $args     = $( '#track_args' );
     const $lyrics   = $( '#lyrics' );
@@ -294,11 +296,13 @@ $( function() {
                     reject();
                 }
 
+                // タグページへの相対リンク
+                // pc_/modeは、モバイル表示時でも動作するように付加
                 const albumTagUrl = `/touhoukashi/tag/${
                     $.isArray( args[ 'album' ] )
                         ? $( args[ 'album' ][ 0 ] ).text()
                         : $( args[ 'album' ] ).text()
-                }`;
+                }?pc_${ '' }mode=1`;
 
                 fetch( albumTagUrl ).then( res => resolve( res.text() ) );
             } );
@@ -488,6 +492,12 @@ $( function() {
             return `
             <span class="prev-track">
                 ${ $( $jqLinkObject )
+                // モバイル表示だったらモバイルリンクに変換
+                .attr( 'href', ( _, attr ) => {
+                    return isMobile
+                        ? attr.replace( '/touhoukashi/', '/touhoukashi/sp/' )
+                        : attr;
+                } )
                 // titleをページ名で置換
                 .attr( 'title', function() { return $( this ).text().trim(); } )
                 .html( '<span style="margin-right: -.5em">&#9664;</span>&#9664; 前の曲' )
@@ -508,6 +518,12 @@ $( function() {
             return `
             <span class="next-track">
                 ${ $( $jqLinkObject )
+                // モバイル表示だったらモバイルリンクに変換
+                .attr( 'href', ( _, attr ) => {
+                    return isMobile
+                        ? attr.replace( '/touhoukashi/', '/touhoukashi/sp/' )
+                        : attr;
+                } )
                 // titleをページ名で置換
                 .attr( 'title', function() { return $( this ).text().trim(); } )
                 .html( '次の曲 <span style="margin-right: -.5em">&#9654;</span>&#9654;' )
