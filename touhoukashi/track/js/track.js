@@ -63,6 +63,9 @@ $( function() {
             // 項目リンク化
             this.entryLinking();
 
+            // カラオケ情報表示
+            this.insertKaraokeInfo();
+
             // メディア表示
             $table.append( this.fetchMedia() );
 
@@ -306,34 +309,38 @@ $( function() {
                         <dl>
                             <dt id="karaoke-dam">DAM</dt>
                             <dd id="karaoke-dam-content">
-                                曲番号：
-                                <span id="karaoke-dam-req">不明</span>
+                                選曲番号：<span id="karaoke-dam-req">不明</span>
                             </dd>
                             <dt id="karaoke-joysound">JOYSOUND</dt>
                             <dd id="karaoke-joysound-content">
-                                曲番号：
-                                <span id="karaoke-joysound-req">不明</span>
+                                曲番号：<span id="karaoke-joysound-req">不明</span>
                             </dd>
                         </dl>
                     </td>
                 </tr>
             ` );
-            const rIsDamUrl = /https?:\/\/clubdam\.com\/karaokesearch\/songleaf\.html\?requestNo=(\d+-\d+)/;
-            const damReqNo  = args[ 'dam' ] ? args[ 'dam' ].match( rIsDamUrl ) : null;
+
+            const damReq = args[ 'dam-req' ].trim();
+            const rDamReqFormat = /^\d{4}-\d{2}$/;
 
             // DAM
-            // none指定なら表示しない
-            if ( args[ 'dam-req' ] === 'none' ) {
-                $karaoke.find( '#karaoke-dam, #karaoke-dam-content' ).remove();
-            } else {
-                //
-                if ( rIsDamUrl.test( args[ 'dam-req' ] ) ) {
-                    const $damUrl = $( args[ 'dam-req' ] );
-                    $karaoke.find( '#karaoke-dam' ).wrapInner( $damUrl.text( '' ) );
+            // none指定なら未配信表示
+            if ( damReq === 'none' ) {
+                $karaoke.find( '#karaoke-dam-req' ).text( '未配信' );
+            } else if ( args[ 'dam-req' ] ) {
+                // 選曲番号のフォーマットでなければ例外表示
+                if ( rDamReqFormat.test( damReq ) ) {
+                    const damUrl = 'https://www.clubdam.com/karaokesearch/songleaf.html?requestNo=' + args[ 'dam-req' ];
+                    const $dam   = $( `<a href="${ damUrl }">${ args[ 'dam-req' ] }</a>` );
+                    $karaoke.find( '#karaoke-dam-req' ).html( $dam );
+                } else {
+                    this.addInfomationEntry( 'DAMの選曲番号は<span class="code">(半角数字4字)-(半角数字2字)</span>の形式で入力してください。' );
                 }
             }
 
             // TODO: JOYSOUND
+
+            $table.append( $karaoke );
         },
 
         /**
