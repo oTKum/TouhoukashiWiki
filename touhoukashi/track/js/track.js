@@ -314,7 +314,7 @@ $( function() {
                     <td>
                         <dl>
                             <dt id="karaoke_dam">DAM</dt>
-                            <dd id="karaoke_dam-content">
+                            <dd id="karaoke_dam_content">
                                 選曲番号：<span id="karaoke_dam_req">不明</span>
                             </dd>
                             <dt id="karaoke_joysound">JOYSOUND</dt>
@@ -326,8 +326,8 @@ $( function() {
                 </tr>
             ` );
 
-            const damReqNo      = args[ 'dam-req' ] ? args[ 'dam-req' ].trim() : null;
-            const damReqUrl     = args[ 'dam-url' ] ? args[ 'dam-url' ].trim() : null;
+            const damReqNo      = args[ 'dam_req' ] ? args[ 'dam_req' ].trim() : null;
+            const damReqUrl     = args[ 'dam_url' ] ? args[ 'dam_url' ].trim() : null;
             const rDamReqFormat = /^\d{4}-\d{2}$/;
 
             // DAM
@@ -349,8 +349,8 @@ $( function() {
                 }
             }
 
-            const joyReqNo      = args[ 'joy-req' ] ? args[ 'joy-req' ].trim() : null;
-            const joyReqUrl     = args[ 'joy-url' ] ? args[ 'joy-url' ].trim() : null;
+            const joyReqNo      = args[ 'joy_req' ] ? args[ 'joy_req' ].trim() : null;
+            const joyReqUrl     = args[ 'joy_url' ] ? args[ 'joy_url' ].trim() : null;
             const rJoyReqFormat = /^\d+$/;
 
             // JOYSOUND
