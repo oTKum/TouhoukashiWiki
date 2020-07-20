@@ -1,0 +1,10 @@
+#site_notice {
+    max-width: 90%;
+    border: solid 2px #616161;
+    border-radius: 10px;
+    margin: 0 auto 1em;
+    padding: 10px;
+}
+#site_notice_header {
+    font-weight: bold;
+}
