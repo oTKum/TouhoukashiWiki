@@ -620,9 +620,9 @@ $( function() {
          */
         showHelp: function() {
             const $help = $( `
-                <span id="trackinfo_help">
-                <a href="/touhoukashi/pages/2442.html">ヘルプ</a>
-                </span>
+                <div id="trackinfo_help">
+                    <a href="/touhoukashi/pages/2442.html">ヘルプ</a>
+                </div>
             ` );
 
             $table.find( 'thead' ).append( $help );
