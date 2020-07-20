@@ -618,7 +618,7 @@ $( function() {
             $infomation = $( `
                 <tr class="trackrow info_header">
                     <th colspan="2">
-                        <span id="infomations_count">_</span>個の情報があります
+                        <span id="infomations_count">_</span>件の情報があります
                         <span class="infomation_show_btn_wrapper">[<a class="infomation_show_btn">表示<a/>]</span>
                     </th>
                 </tr>
@@ -630,7 +630,7 @@ $( function() {
             ` );
 
             // 表示ボタンクリックでインフォ表示
-            $infomation.find( '.infomation_show_btn' ).on( 'click', ( elem ) => {
+            $infomation.find( '.infomation_show_btn' ).on( 'click', elem => {
                 $( elem.target ).text( $infomation.hasClass( 'infomation_show' ) ? '表示' : '非表示' );
                 $infomation.eq( 2 ).toggleClass( 'infomation_show' );
             } );
@@ -647,7 +647,16 @@ $( function() {
             }
 
             // エントリー追加
-            $infomation.find( '#infomations_content' ).append( `<li>${ summary }</li>` );
+            $infomation
+            .find( '#infomations_content' )
+            .append( `<li>${ summary }</li>` );
+
+            // 非同期処理後の追加の場合は件数をインクリメントする
+            if ( $( '#infomations_count' ).length ) {
+                $infomation
+                .find( '#infomations_count' )
+                .text( ( _, text ) => Number( text ) + 1 );
+            }
         },
 
         /**
