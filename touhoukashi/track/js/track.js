@@ -338,7 +338,7 @@ $( function() {
             // none指定なら未配信表示
             if ( damReqNo === 'none' ) {
                 $karaoke.find( '#karaoke_dam_req' ).text( '未配信' );
-            } else if ( damReqUrl ) {
+            } else if ( damReqNo ) {
                 // 選曲番号のフォーマットでなければ例外表示
                 if ( rDamReqFormat.test( damReqNo ) ) {
                     // URL指定があればそちらにリンク
