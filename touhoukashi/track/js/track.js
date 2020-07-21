@@ -39,10 +39,12 @@ $( function() {
     const $wikibody = $( '#wikibody' );
     const $args     = $( '#track_args' );
     const $lyrics   = $( '#lyrics' );
-    let   $pagename,   // ページ名のjQオブジェクト
-          $table,      // トラック情報表のjQオブジェクト
-          $infomation, // インフォ表示のjQオブジェクト
-          args;        // オブジェクト化した引数
+    let   $pagename,          // ページ名のjQオブジェクト
+          $table,             // トラック情報表のjQオブジェクト
+          $infomation,        // インフォ表示のjQオブジェクト
+          args,               // オブジェクト化した引数
+          existsPrev = false, // 前の曲が挿入されているか
+          existsNext = false; // 次の曲が挿入されているか
 
     if ( $wikibody.length ) {
         // PC
@@ -78,9 +80,8 @@ $( function() {
             // アルバムのタグページから曲一覧を取得し、前後の曲を挿入
             this.fetchAlbumTag()
             .then( res => this.insertSongsAround( res ) )
-            .then( () => this.addInfomationEntry( 'アルバムタグページの情報を取得できなかったため、前後の楽曲情報は表示されません。' ) )
             // 実行に関する情報があれば表示
-            // 非同期処理によって一番最後の処理となる可能性が高いため、ここで呼び出し
+            // 非同期処理のため一番最後の処理となる可能性が高い。そのためここで呼び出し
             .finally( () => this.appendInfomationToTable() );
 
             // スマホ表示用のスタイル適用
@@ -283,12 +284,12 @@ $( function() {
             return new Promise( ( resolve, reject ) => {
                 // Fetch API非対応か、アルバム未指定の場合は動作しない
                 if ( !window.fetch ) {
-                    this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の楽曲情報の取得は実行されません。' );
+                    this.addInfomationEntry( 'このブラウザはFetch APIに対応していないため、前後の楽曲情報の自動取得は実行されません。' );
                     reject();
                 }
 
                 if ( !args[ 'album' ] ) {
-                    this.addInfomationEntry( '引数にアルバム指定がないため、前後の楽曲情報の取得は実行されません。' );
+                    this.addInfomationEntry( '引数にアルバム指定がないため、前後の自動楽曲情報の取得は実行されません。' );
                     reject();
                 }
 
@@ -397,10 +398,12 @@ $( function() {
             if ( args[ 'prev' ] ) {
                 if ( args[ 'prev' ] === 'none' ) {
                     // none指定だった場合はテキストなしで挿入
-                    html += '<span class="prev-track"></span>';
+                    html       += '<span class="prev-track"></span>';
+                    existsPrev  = true;
                 } else if ( rIsHtmlElement.test( args[ 'prev' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
-                    html += this._genPrevTrackHtml( args[ 'prev' ] );
+                    html       += this._genPrevTrackHtml( args[ 'prev' ] );
+                    existsPrev  = true;
                 } else {
                     // リンクでなければ例外
                     this.addInfomationEntry( '前トラックはリンクで指定してください。' );
@@ -410,18 +413,20 @@ $( function() {
             if ( args[ 'next' ] ) {
                 if ( args[ 'next' ] === 'none' ) {
                     // none指定だった場合はテキストなしで挿入
-                    html += '<span class="next-track"></span>';
+                    html       += '<span class="next-track"></span>';
+                    existsNext  = true;
                 } else if ( rIsHtmlElement.test( args[ 'next' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
-                    html += this._genNextTrackHtml( args[ 'next' ] );
+                    html       += this._genNextTrackHtml( args[ 'next' ] );
+                    existsNext  = true;
                 } else {
                     // リンクでなければ例外
                     this.addInfomationEntry( '次トラックはリンクで指定してください。' );
                 }
             }
 
-            // 前後の指定が正常に挿入されていた場合は終了
-            if ( $( html ).find( '.prev-track, .next-track' ).length === 2 ) {
+            // 前後両方の指定が正常に挿入されていた場合は終了
+            if ( existsPrev && existsNext ) {
                 html += '</td></tr>';
                 $table.append( html );
 
@@ -453,38 +458,45 @@ $( function() {
                 // 楽曲名が不正なら弾く
                 if ( !trackName ) continue;
 
-                const trackNumber = rPagename.test( trackName ) // 現ループのトラック番号
+                // 現ループのトラック番号
+                const trackNumber = rPagename.test( trackName )
                     ? Number( trackName.match( rPagename )[ 1 ] )
                     : 0;
 
                 // 指定による挿入がなく、前後のトラック番号であれば自動取得
                 // ただし、タグページに前後の同一トラック番号が複数ある場合は例外表示
-                if ( !html.includes( 'prev-track' ) && trackNumber === currentPageTrackNumber - 1 ) {
+                if ( !existsPrev && trackNumber === currentPageTrackNumber - 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ tagPageLink }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ tagPageLink }」には前のトラック番号である「${ currentPageTrackNumber - 1 }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
 
                         continue;
                     }
 
                     html += this._genPrevTrackHtml( $item );
-                } else if ( !html.includes( 'next-track' ) && trackNumber === currentPageTrackNumber + 1 ) {
+                    existsPrev = true;
+                } else if ( !existsNext && trackNumber === currentPageTrackNumber + 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ tagPageLink }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ tagPageLink }」には次のトラック番号である「${ currentPageTrackNumber + 1 }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
 
                         continue;
                     }
 
                     html += this._genNextTrackHtml( $item );
+                    existsNext = true;
+
                     continue;
                 }
             }
 
             html += '</td></tr>';
 
-            // 前後の楽曲どちらもが取得できてなかったら挿入しない
-            if ( !html.includes( 'prev-track' ) && !html.includes( 'next-track' ) ) return;
+            // 前後の楽曲どちらもが取得できてなかったら例外を表示し、挿入しない
+            if ( !existsPrev && !existsNext ) {
+                this.addInfomationEntry( 'アルバムタグページの情報を取得できなかったため、前後の楽曲情報の自動挿入は実行されませんでした。' );
+                return;
+            }
 
             $table.append( html );
         },
