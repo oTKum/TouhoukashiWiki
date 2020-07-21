@@ -563,6 +563,9 @@ $( function() {
             let count = 0; // 指定トラック番号が存在した回数
 
             for ( const entry of Object.values( $entryList ) ) {
+                // li要素じゃなかったら終了
+                if ( !$( entry ).is( 'li' ) ) break;
+
                 const trackName = $( entry ).text().trim(); // 現ループの曲名
 
                 // 楽曲名が不正なら弾く
