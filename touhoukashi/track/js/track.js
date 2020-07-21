@@ -397,8 +397,7 @@ $( function() {
             // 前後の曲指定があった場合の処理
             if ( args[ 'prev' ] ) {
                 if ( args[ 'prev' ] === 'none' ) {
-                    // none指定だった場合はテキストなしで挿入
-                    html       += '<span class="prev-track"></span>';
+                    // none指定だった場合はスキップ
                     existsPrev  = true;
                 } else if ( rIsHtmlElement.test( args[ 'prev' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
@@ -412,8 +411,7 @@ $( function() {
 
             if ( args[ 'next' ] ) {
                 if ( args[ 'next' ] === 'none' ) {
-                    // none指定だった場合はテキストなしで挿入
-                    html       += '<span class="next-track"></span>';
+                    // none指定だった場合はスキップ
                     existsNext  = true;
                 } else if ( rIsHtmlElement.test( args[ 'next' ] ) ) {
                     // 指定にaタグが含まれる場合は挿入
@@ -427,7 +425,11 @@ $( function() {
 
             // 前後両方の指定が正常に挿入されていた場合は終了
             if ( existsPrev && existsNext ) {
+                // 前後両方がnone指定によってスキップされた場合も挿入しない
+                if ( !html.includes( 'prev-track' ) && !html.includes( 'next-track' ) ) return;
+
                 html += '</td></tr>';
+
                 $table.append( html );
 
                 return;
