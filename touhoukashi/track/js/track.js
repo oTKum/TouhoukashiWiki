@@ -304,7 +304,7 @@ $( function() {
                         : $( args[ 'album' ] ).text()
                 }?pc_${ '' }mode=1`;
 
-                fetch( albumTagUrl ).then( res => resolve( res.text() ) );
+                fetch( encodeURI( albumTagUrl ) ).then( res => resolve( res.text() ) );
             } );
         },
 
@@ -432,6 +432,19 @@ $( function() {
                 return;
             }
 
+            // タグページへの相対リンク
+            const tagPageLink = ( () => {
+                const album = $.isArray( args[ 'album' ] )
+                    ? $( args[ 'album' ][ 0 ] ).text()
+                    : $( args[ 'album' ] ).text();
+                let result = '<a href="touhoukashi/';
+
+                result += isMobile ? 'sp/' : '';
+                result += `tag/${ encodeURI( album ) }">${ album }</a>`;
+
+                return result;
+            } )();
+
             // 曲一覧から前後の曲を探す
             for ( const i in $entryList ) {
                 // 前後両方を取得できているなら終了
@@ -454,9 +467,7 @@ $( function() {
                 if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${
-                                $.isArray( args[ 'album' ] ) ? args[ 'album' ][ 0 ] : args[ 'album' ]
-                            }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ tagPageLink }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
                         continue;
                     }
@@ -465,9 +476,7 @@ $( function() {
                 } else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${
-                                $.isArray( args[ 'album' ] ) ? args[ 'album' ][ 0 ] : args[ 'album' ]
-                            }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${ tagPageLink }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
                         continue;
                     }
