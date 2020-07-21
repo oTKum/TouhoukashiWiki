@@ -116,11 +116,11 @@ $( function() {
                 .replace( /\|/, '' )
                 .replace( /<[!\/]?(!--@+--|div|br)>|\t|\n/g, '' )
                 .split( '|' );
-            let hash, data = {};
+            let data = {};
 
             // 引数をオブジェクト化
-            for ( let i in localArgs ) {
-                hash = localArgs[ i ]
+            for ( const arg of localArgs ) {
+                let hash = arg
                     .replace( '=', '::' )  // HTML タグ考慮
                     .split( '::' );
 
@@ -146,7 +146,6 @@ $( function() {
          * 引数からトラック表を生成
          */
         genTable: function() {
-            const tableKeys = Object.keys( args );  // 引数のキー配列
             const title     = args[ 'title' ];      // 曲名
             const escKey    = /^(next|prev)$/;      // 表生成時に除外するキー
             const escValue  = /^(\s*|\r|\n|\r\n)$/; // 表生成時に除外する値
@@ -171,36 +170,33 @@ $( function() {
             table += '</th></tr></thead><tbody>';
 
             // 各引数の表示処理
-            for ( let i in tableKeys )  {
-                const key   = tableKeys[ i ];  // 現ループのキー名
-                const value = args[ key ];     // 現ループの値名
-
+            for ( const [ k, v ] of Object.entries( args ) ) {
                 // 条件に満たない引数は弾く
                 if (
-                    escKey.test( key )                            // 除外指定されたキーの場合
-                    || escValue.test( value )                     // 除外指定された値の場合
-                    || !headers[ key ]                            // 未登録パラメータの場合
-                    || ( key === 'title' && !$.isArray( value ) ) // タイトルの場合に、指定が複数でない場合
+                    escKey.test( k )                        // 除外指定されたキーの場合
+                    || escValue.test( v )                   // 除外指定された値の場合
+                    || !headers[ k ]                        // 未登録パラメータの場合
+                    || ( k === 'title' && !$.isArray( v ) ) // タイトルの場合に、指定が複数でない場合
                 ) continue;
 
-                table += '<tr class="trackrow ' + key + '">'
-                    + '<th>' + headers[ key ] + '</th><td>';
+                table += '<tr class="trackrow ' + k + '">'
+                    + '<th>' + headers[ k ] + '</th><td>';
 
                 // 複数指定処理
-                if ( $.isArray( value ) ) {
+                if ( $.isArray( v ) ) {
                     table += '<ul>';
 
-                    for ( let i in value ) {
-                        if ( key === 'title' && i == 0 ) {
+                    for ( const i in v ) {
+                        if ( k === 'title' && Number( i ) === 0 ) {
                             continue;
                         }
 
-                        table += '<li>' + value[ i ] + '</li>';
+                        table += '<li>' + v[ i ] + '</li>';
                     }
 
                     table += '</ul>';
                 } else {
-                    table += value;
+                    table += v;
                 }
                 table += '</td></tr>';
             }
@@ -238,9 +234,9 @@ $( function() {
                 html += nicoId || scUrl
                     ? '<div class="media_section">YouTube</div>'
                     : '';
-                for ( let i in ytId ) {
+                for ( const id of ytId ) {
                     html += '<iframe width="100%" src="'
-                        + 'https://youtube.com/embed/' + ytId[ i ]
+                        + 'https://youtube.com/embed/' + id
                         + '?showinfo=0" frameborder="0" allowfullscreen></iframe>';
                 }
                 html += '</div>';
@@ -252,9 +248,9 @@ $( function() {
                 html += ytId || scUrl
                     ? '<div class="media_section">ニコニコ動画</div>'
                     : '';
-                for ( let i in nicoId ) {
+                for ( const id of nicoId ) {
                     html += '<iframe width="100%" src="'
-                        + 'https://embed.nicovideo.jp/watch/' + nicoId[ i ]
+                        + 'https://embed.nicovideo.jp/watch/' + id
                         + '" frameborder="0" allowfullscreen></iframe>';
                 }
                 html += '</div>';
@@ -437,7 +433,7 @@ $( function() {
                 const album = $.isArray( args[ 'album' ] )
                     ? $( args[ 'album' ][ 0 ] ).text()
                     : $( args[ 'album' ] ).text();
-                let result = '<a href="touhoukashi/';
+                let result = '<a href="/touhoukashi/';
 
                 result += isMobile ? 'sp/' : '';
                 result += `tag/${ encodeURI( album ) }">${ album }</a>`;
@@ -446,14 +442,13 @@ $( function() {
             } )();
 
             // 曲一覧から前後の曲を探す
-            for ( const i in $entryList ) {
+            for ( const [ k, entry ] of Object.entries( $entryList ) ) {
                 // 前後両方を取得できているなら終了
                 if ( html.includes( 'prev-track' ) && html.includes( 'next-track' ) ) break;
-                // 整数じゃなければ終了
-                if ( isNaN( i ) ) break;
+                if ( isNaN( k ) ) continue;
 
-                const $item     = $entryList.eq( i ).find( 'a' ); // 現ループのa
-                const trackName = $item.text().trim();            // 現ループの曲名
+                const $item     = $( entry ).find( 'a' ); // 現ループのa
+                const trackName = $item.text().trim();    // 現ループの曲名
 
                 // 楽曲名が不正なら弾く
                 if ( !trackName ) continue;
@@ -462,9 +457,9 @@ $( function() {
                     ? Number( trackName.match( rPagename )[ 1 ] )
                     : 0;
 
-                // 指定による挿入がなく、現ループの曲が前後のトラック番号かの判別
-                // 前後の同一トラック番号が複数ある場合は例外表示
-                if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
+                // 指定による挿入がなく、前後のトラック番号であれば自動取得
+                // ただし、タグページに前後の同一トラック番号が複数ある場合は例外表示
+                if ( !html.includes( 'prev-track' ) && trackNumber === currentPageTrackNumber - 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
                             `タグページ「${ tagPageLink }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
@@ -473,7 +468,7 @@ $( function() {
                     }
 
                     html += this._genPrevTrackHtml( $item );
-                } else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
+                } else if ( !html.includes( 'next-track' ) && trackNumber === currentPageTrackNumber + 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
                             `タグページ「${ tagPageLink }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
@@ -555,9 +550,8 @@ $( function() {
         _countSameTrackNumber: function( $entryList, trackNumberToSearch ){
             let count = 0; // 指定トラック番号が存在した回数
 
-            for ( let i in $entryList ) {
-                const $item     = $entryList.eq( i );  // 現ループのli
-                const trackName = $item.text().trim(); // 現ループの曲名
+            for ( const entry of Object.values( $entryList ) ) {
+                const trackName = $( entry ).text().trim(); // 現ループの曲名
 
                 // 楽曲名が不正なら弾く
                 if ( !trackName || !rPagename.test( trackName ) ) continue;
