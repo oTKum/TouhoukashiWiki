@@ -454,7 +454,9 @@ $( function() {
                 if ( !$( html ).find( '.prev-track' ).length && trackNumber === currentPageTrackNumber - 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${
+                                $.isArray( args[ 'album' ] ) ? args[ 'album' ][ 0 ] : args[ 'album' ]
+                            }」には前方のトラック番号である「${ currentPageTrackNumber - 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
                         continue;
                     }
@@ -463,7 +465,9 @@ $( function() {
                 } else if ( !$( html ).find( '.next-track' ).length && trackNumber === currentPageTrackNumber + 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ args[ 'album' ] }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
+                            `タグページ「${
+                                $.isArray( args[ 'album' ] ) ? args[ 'album' ][ 0 ] : args[ 'album' ]
+                            }」には後方のトラック番号である「${ currentPageTrackNumber + 1 }」と重複する曲があるため、曲情報の取得を正常に行なえません。` );
 
                         continue;
                     }
