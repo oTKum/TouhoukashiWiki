@@ -696,10 +696,21 @@ $( function() {
          * @param {string} summary 追加する項目の内容
          */
         addInfomationEntry: function( summary ) {
+            // 内容がすでに追加されたエントリに存在するか否か
+            let isDuplicate = false;
+
             // インフォオブジェクト未生成なら作成
             if ( !$infomation ) {
                 this.createInfomationElement();
             }
+
+            // 重複チェック
+            $.each( $infomation.find( 'li' ), ( _, elem ) => {
+                if ( $( elem ).html() === summary ) isDuplicate = true;
+            } );
+
+            // 重複していれば追加しない
+            if ( isDuplicate ) return;
 
             // エントリー追加
             $infomation
