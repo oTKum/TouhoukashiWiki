@@ -470,7 +470,9 @@ $( function() {
                 if ( !existsPrev && trackNumber === currentPageTrackNumber - 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ tagPageLink }」には前のトラック番号である「${ currentPageTrackNumber - 1 }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
+                            `タグページ「${ tagPageLink }」には前のトラック番号である「${
+                                ( currentPageTrackNumber - 1 ).toString().padStart( 2, '0' )
+                            }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
 
                         continue;
                     }
@@ -480,7 +482,9 @@ $( function() {
                 } else if ( !existsNext && trackNumber === currentPageTrackNumber + 1 ) {
                     if ( this._countSameTrackNumber( $entryList, trackNumber ) > 1 ) {
                         this.addInfomationEntry(
-                            `タグページ「${ tagPageLink }」には次のトラック番号である「${ currentPageTrackNumber + 1 }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
+                            `タグページ「${ tagPageLink }」には次のトラック番号である「${
+                                ( currentPageTrackNumber + 1 ).toString().padStart( 2, '0' )
+                            }」を含む楽曲が複数あるため、自動挿入は実行されませんでした。` );
 
                         continue;
                     }
