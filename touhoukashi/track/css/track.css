@@ -169,7 +169,7 @@ rt {
 #trackinfo .info_content ul {
     padding: 0;
     margin: 0;
-    height: 0;
+    max-height: 0;
     list-style: initial;
     transition: .3s;
 }
@@ -177,7 +177,6 @@ rt {
     opacity: 0;
     visibility: hidden;
     margin: 0 0 0 1.5em;
-    max-height: 0;
     transition: .3s, opacity .2s;
 }
 #trackinfo .info_content.infomation_show td {
@@ -186,11 +185,10 @@ rt {
 }
 #trackinfo .info_content.infomation_show ul {
     padding: 5px 0;
-    height: 100%;
+    max-height: 50em;
 }
 #trackinfo .info_content.infomation_show li {
     opacity: 1;
-    max-height: 4em;
     visibility: visible;
 }
 #trackinfo .info_content.infomation_show li:nth-of-type(n+2) {
