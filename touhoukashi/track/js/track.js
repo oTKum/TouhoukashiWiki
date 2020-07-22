@@ -523,7 +523,7 @@ $( function() {
                 // モバイル表示だったらモバイルリンクに変換
                 .attr( 'href', ( _, attr ) => {
                     return isMobile
-                        ? attr.replace( '/touhoukashi/', '/touhoukashi/sp/' )
+                        ? attr.replace( /\/touhoukashi\/(?!sp)/, '/touhoukashi/sp/' )
                         : attr;
                 } )
                 // titleをページ名で置換
@@ -549,7 +549,7 @@ $( function() {
                 // モバイル表示だったらモバイルリンクに変換
                 .attr( 'href', ( _, attr ) => {
                     return isMobile
-                        ? attr.replace( '/touhoukashi/', '/touhoukashi/sp/' )
+                        ? attr.replace( /\/touhoukashi\/(?!sp)/, '/touhoukashi/sp/' )
                         : attr;
                 } )
                 // titleをページ名で置換
