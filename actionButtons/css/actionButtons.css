@@ -105,7 +105,8 @@ li#ab-create__music {
     right: 0;
     transition: top .2s ease-in-out 0s, right .2s ease-in-out 0s;
 }
-#ab-menu .ab-menu__tooltip {
+#ab-menu .ab-menu__tooltip,
+#ab-menu .ab-error__text {
     position: absolute;
     padding: 3px;
     white-space: nowrap;
