@@ -105,7 +105,7 @@ li#ab-create__music {
     right: 0;
     transition: top .2s ease-in-out 0s, right .2s ease-in-out 0s;
 }
-#ab-menu span {
+#ab-menu .ab-menu__tooltip {
     position: absolute;
     padding: 3px;
     white-space: nowrap;
@@ -118,9 +118,9 @@ li#ab-create__music {
     zoom: 99%;  /* 文字がぼやけるのを防止 */
 }
 .ab-menu__tooltip {
-    top: -22.5px;
+    bottom: 120%;
     right: 50%;
-    transform: translate(50%, -50%);
+    transform: translateX(50%);
     border: 1px solid rgba(0, 0, 0, .7);
     border-radius: 3px;
     background-color: rgba(0, 0, 0, .6);
@@ -134,8 +134,8 @@ li#ab-create__music {
     border-radius: 3px;
     background-color: rgba(0, 0, 0, .6);
 }
-#ab-create > *:hover span,
-#ab-edit > *:hover span {
+#ab-create > *:hover .ab-menu__tooltip,
+#ab-edit > *:hover .ab-menu__tooltip {
     opacity: 1;
     transition-delay: .5s;
 }
@@ -164,7 +164,7 @@ li#ab-create__music {
     color: #ffffff;
     transform: rotate(45deg);
 }
-.ab-active__new #ab-create__new span {
+.ab-active__new #ab-create__new .ab-menu__tooltip {
     visibility: hidden;
     transition: .03s;
 }
@@ -194,5 +194,5 @@ li > .fas {
     top: -85px;
 }
 #ab-create .ab-menu__small {
-    font-size: small;
+    font-size: 80%;
 }

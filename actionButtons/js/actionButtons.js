@@ -9,7 +9,7 @@ $( function() {
     const msg = {
         create: {
             new: 'ページを作成',
-            newDesc: '（Ctrl+クリックで新規作成）',
+            newDesc: '(Ctrl+クリックで通常作成)',
             circle: 'サークルページを作成',
             album: 'アルバムページを作成',
             music: '曲ページを作成'
