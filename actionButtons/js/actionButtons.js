@@ -92,7 +92,9 @@ $( function() {
         + '</div>';
 
     function genNewPageLink( page, fromPagename ) {
-        return '/touhoukashi/?cmd=pedit&page=' + page + '&frompagename=' + fromPagename;
+        page = encodeURIComponent(page);
+
+        return `/touhoukashi/?cmd=pedit&page=${page}&frompagename=${fromPagename}`;
     }
 
     $( 'head' ).find( 'link' ).first().before( faCss );
