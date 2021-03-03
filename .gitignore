@@ -79,13 +79,11 @@ jspm_packages/
 Thumbs.db
 
 # Local definition
-private/
-test/
 .vs/
-/*/css/
-/*/.history/
-/*/img/
-/*/js/
+.history/
+/css/
+/img/
+/js/
 *.code-workspace
 *.exe
 *.html
